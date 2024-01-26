@@ -2,7 +2,7 @@ const { MongoClient } = require('mongodb');
 
 class MongoDBConnector {
     constructor() {
-        this.uri = "mongodb+srv://khoapngcd201807:khoapngcd201807@cluster0.csh60at.mongodb.net/?retryWrites=true&w=majority";
+        this.uri ="mongodb+srv://khoapngcd201807:khoapngcd201807@cluster0.csh60at.mongodb.net/?retryWrites=true&w=majority";
         this.client = new MongoClient(this.uri);
     }
 

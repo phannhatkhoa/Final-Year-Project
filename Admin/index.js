@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { MongoDBConnector } = require('./database'); // Sử dụng named import
+const { MongoDBConnector } = require('./database');
+const loginRouter = require('./Route/loginRoute');
 
 const app = express();
 const databaseClass = new MongoDBConnector(); // Tạo thực thể của MongoDBConnector
@@ -19,10 +20,12 @@ const myLogger = function (req, res, next) {
     }
 };
 
-app.post('/login', myLogger, (req, res) => {
-    // You should not log or send sensitive information like passwords in the response.
-    res.json({ message: 'Login successful' });
-});
+// app.post('/login', myLogger, (req, res) => {
+//     // You should not log or send sensitive information like passwords in the response.
+//     res.json({ message: 'Login successful' });
+// });
+
+app.use('/abc',loginRouter);
 
 databaseClass.connect();
 const port = 3000;
