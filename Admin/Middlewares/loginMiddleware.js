@@ -23,8 +23,6 @@ const loginValidation = validate(checkSchema({
             options: { min: 8 },
             errorMessage: 'Password must be at least 8 characters long'
         },
-        // Add custom strong password validation here if needed
-        // isStrongPassword: { ... }
     }
 }));
 
