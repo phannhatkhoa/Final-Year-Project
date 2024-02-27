@@ -1,0 +1,45 @@
+.glass{
+    background: rgba(255, 255, 255, 0.55);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px #4747470b;
+    backdrop-filter: blur(7.1px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    @apply border-4 border-gray-50 shrink-0 h-3/4 w-[30%] rounded-3xl py-20 px-7 min-w-max;
+    
+}
+
+.avatar_img{
+    border-width: 4px;
+    border-color: #D1D5DB; /* Replace with the desired color */
+    width: 135px;
+    border-radius: 50%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Replace with the desired box-shadow */
+    cursor: pointer;
+    margin: 0 auto;
+}
+
+.textbox{
+    border-width: 2px;
+  border-color: #D1D5DB; /* Replace with the desired color */
+  padding: 8px;
+  width: 400px; /* Adjust the width as needed */
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.btn {
+    @apply border bg-indigo-500 w-full py-4 rounded-lg text-gray-50 text-xl shadow-sm text-center;
+}
+
+.btn:hover{
+    background-color: #ff6a6a;
+}
+
+input[type='file']{
+    display: none;
+}
