@@ -72,20 +72,20 @@ export default function Login() {
           </button>
         </form>
 
-      <div className="flex items-center mt-4">
-        <div className="flex-1 border-t border-gray-300"></div>
-        <span className="mx-4 text-sm text-gray-500">OR</span>
-        <div className="flex-1 border-t border-gray-300"></div>
-      </div>
+        <div className="flex items-center mt-4">
+          <div className="flex-1 border-t border-gray-300"></div>
+          <span className="mx-4 text-sm text-gray-500">OR</span>
+          <div className="flex-1 border-t border-gray-300"></div>
+        </div>
 
         {/* Google Login Button */}
         <div className="mt-4">
           <button
-          onClick={handleGoogleLogin}
-          className="w-full bg-red-500 text-white py-2 px-4 rounded-md mt-4 hover:bg-red-600 focus:outline-none"
-        >
-          Login with Google
-        </button>
+            onClick={handleGoogleLogin}
+            className="w-full bg-red-500 text-white py-2 px-4 rounded-md mt-4 hover:bg-red-600 focus:outline-none"
+          >
+            Login with Google
+          </button>
         </div>
 
         {/* Registration Link */}

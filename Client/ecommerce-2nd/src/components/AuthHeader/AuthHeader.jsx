@@ -16,8 +16,8 @@ export default function AuthHeader() {
         </div>
 
         <div className="hidden md:flex space-x-4">
-          <a href="#" className="hover:text-gray-400">Home</a>
-          <a href="#" className="hover:text-gray-400">Shop</a>
+          <a href="/" className="hover:text-gray-400">Home</a>
+          <a href="/" className="hover:text-gray-400">Shop</a>
           <a href="#" className="hover:text-gray-400">About Us</a>
           <a href="#" className="hover:text-gray-400">Contact</a>
         </div>
@@ -33,7 +33,7 @@ export default function AuthHeader() {
       {isOpen && (
         <div className="md:hidden bg-gray-800 text-white py-2">
           <a href="#" className="block px-4 py-2 hover:bg-gray-700">Home</a>
-          <a href="#" className="block px-4 py-2 hover:bg-gray-700">Shop</a>
+          <a href="/register" className="block px-4 py-2 hover:bg-gray-700">Shop</a>
           <a href="#" className="block px-4 py-2 hover:bg-gray-700">About Us</a>
           <a href="#" className="block px-4 py-2 hover:bg-gray-700">Contact</a>
         </div>

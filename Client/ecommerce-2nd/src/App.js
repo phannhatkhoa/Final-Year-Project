@@ -3,11 +3,17 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./Pages/Auth/Login/Login";
 import RegisterTemplate from "./templates/RegisterTemplate";
 import Register from "./Pages/Auth/Register/Register";
+import HomeTemplate from "./templates/HomeTemplate";
+import Home from "./Pages/HomePage/Home";
 
 function App() {
   return (
     <Router>
       <Routes>
+      <Route path="/" element={<HomeTemplate>
+          <Home/>
+        </HomeTemplate>} />
+
         <Route path="/login" element={<RegisterTemplate>
           <Login/>
         </RegisterTemplate>} />

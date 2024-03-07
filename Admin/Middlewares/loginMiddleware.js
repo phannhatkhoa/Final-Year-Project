@@ -1,7 +1,7 @@
 const { body, checkSchema } = require('express-validator');
 const validate = require('../Utils/Validation');
 
-// Define the validation schema for the login route
+
 const loginValidation = validate(checkSchema({
     email: {
         in: 'body',
