@@ -1,33 +1,30 @@
-import React, { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { RegisterAPI } from '../../../api/auth.api';
+import { toast } from 'react-toastify'
+import { useNavigate } from "react-router-dom";
 
-export default function Register() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [username, setUsername] = useState('');
+const Register = () => {
+  const navigate = useNavigate();
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
+  // Create the useMutation hook
+  const { mutate } = useMutation(
+    // Pass the mutation function directly
+    (body) => RegisterAPI(body),
+    {
+      onSuccess: (data) => {
+        navigate('/login');
+      },
+      onError: (error) => {
+        toast.error('lzzlzlz')
+      },
+    }
+  );
 
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const handleConfirmPasswordChange = (e) => {
-    setConfirmPassword(e.target.value);
-  };
-
-  const handleRegistration = (e) => {
-    e.preventDefault();
-    console.log('Email:', email, 'Password:', password, 'Confirm Password:', confirmPassword);
-  };
-
-  const handleUsernameChange = (e) => {
-    setUsername(e.target.value);
-  };
-  const handleGoogleLogin = () => {
-    console.log('Logging in with Google');
+  const onSubmit = (data) => {
+    mutate(data); // This triggers the mutation and runs onSuccess/onError callbacks
   };
 
   return (
@@ -44,7 +41,7 @@ export default function Register() {
       {/* Right Column - Registration Form */}
       <div className="lg:col-span-1 flex flex-col justify-center">
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">Create Your Account</h2>
-        <form onSubmit={handleRegistration} className="relative group">
+        <form onSubmit={handleSubmit(onSubmit)} className="relative group">
           <div className="mb-4">
             <label htmlFor="email" className="block text-sm font-medium text-gray-600">
               Email
@@ -52,27 +49,27 @@ export default function Register() {
             <input
               type="email"
               id="email"
-              name="email"
-              value={email}
-              onChange={handleEmailChange}
+              {...register('email', { required: 'Email is required' })}
               className="mt-1 p-3 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300"
               required
             />
+            {errors.email && <span className="text-red-500">{errors.email.message}</span>}
           </div>
+
           <div className="mb-4">
-            <label htmlFor="username" className="block text-sm font-medium text-gray-600">
+            <label htmlFor="user_name" className="block text-sm font-medium text-gray-600">
               Username
             </label>
             <input
               type="text"
-              id="username"
-              name="username"
-              value={username}
-              onChange={handleUsernameChange}
+              id="user_name"
+              {...register('user_name', { required: 'Username is required' })}
               className="mt-1 p-3 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300"
               required
             />
+            {errors.user_name && <span className="text-red-500">{errors.user_name.message}</span>}
           </div>
+
           <div className="mb-4">
             <label htmlFor="password" className="block text-sm font-medium text-gray-600">
               Password
@@ -80,42 +77,37 @@ export default function Register() {
             <input
               type="password"
               id="password"
-              name="password"
-              value={password}
-              onChange={handlePasswordChange}
+              {...register('password', { required: 'Password is required' })}
               className="mt-1 p-3 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300"
               required
             />
+            {errors.password && <span className="text-red-500">{errors.password.message}</span>}
           </div>
+
           <div className="mb-4">
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-600">
+            <label htmlFor="confirm_password" className="block text-sm font-medium text-gray-600">
               Confirm Password
             </label>
             <input
               type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              value={confirmPassword}
-              onChange={handleConfirmPasswordChange}
+              id="confirm_password"
+              {...register('confirm_password', { required: 'Confirm Password is required' })}
               className="mt-1 p-3 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300"
               required
             />
+            {errors.confirm_password && <span className="text-red-500">{errors.confirm_password.message}</span>}
           </div>
+
           <button
             type="submit"
             className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none relative group"
           >
             Register
-            <div className="glass-effect absolute top-0 left-0 right-0 bottom-0 bg-white opacity-0 transition duration-300 group-hover:opacity-40 rounded-md backdrop-blur-md"></div>
           </button>
-          <button
-          onClick={handleGoogleLogin}
-          className="w-full bg-red-500 text-white py-2 px-4 rounded-md mt-4 hover:bg-red-600 focus:outline-none"
-        >
-          Login with Google
-        </button>
         </form>
       </div>
     </div>
   );
 }
+
+export default Register;

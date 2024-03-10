@@ -5,9 +5,18 @@ import RegisterTemplate from "./templates/RegisterTemplate";
 import Register from "./Pages/Auth/Register/Register";
 import HomeTemplate from "./templates/HomeTemplate";
 import Home from "./Pages/HomePage/Home";
+import {
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 function App() {
+
+  const queryClient = new QueryClient()
+
   return (
+    <QueryClientProvider client={queryClient}>
     <Router>
       <Routes>
       <Route path="/" element={<HomeTemplate>
@@ -22,6 +31,8 @@ function App() {
         element={<RegisterTemplate><Register/></RegisterTemplate>} />
       </Routes>
     </Router>
+    <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 }
 
