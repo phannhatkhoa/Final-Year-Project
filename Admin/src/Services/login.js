@@ -4,21 +4,23 @@ const { generateToken } = require("../Configuration/jwtConfig");
 
 async function login(email, password) {
     try {
-        const existingUser = await User.findOne({ email });
+        const existingUser = await User.findOne({
+            email: email,
+        });
         if (!existingUser) {
-            throw new Error("User not found");
+            throw new Error("Invalid email or password");
         }
-
-        const isPasswordValid = await bcrypt.compare(password, existingUser.password);
+        const isPasswordValid = await generateToken(existingUser)
         if (!isPasswordValid) {
-            throw new Error("Incorrect password");
+            throw new Error("Invalid email or password");
         }
-
-        const token = generateToken(existingUser);
-        return token;
+        const generateTokens = await generateToken(existingUser._id);
+        console.log("Token generated:", generateTokens);
+        return generateToken;
     } catch (error) {
+        console.error("Error during login:", error.message);
         throw new Error("Invalid email or password");
     }
 }
 
-module.exports = { login };
+module.exports = login;

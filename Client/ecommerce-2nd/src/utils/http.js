@@ -20,7 +20,7 @@ class Http {
 
     // Add a response interceptor
     this.instance.interceptors.response.use(function (response) {
-      console.log(response.data?.message);
+      console.log(response)
       alert(response.data?.message)
     }, function (error) {
       return Promise.reject(error);
