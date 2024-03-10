@@ -18,7 +18,7 @@ const Register = () => {
         navigate('/login');
       },
       onError: (error) => {
-        toast.error('lzzlzlz')
+        toast.error('Failed to register user. Please try again.')
       },
     }
   );
