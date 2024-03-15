@@ -1,12 +1,15 @@
+import React from 'react'
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { LoginAPI } from '../../../api/auth.api';
-import { useNavigate } from "react-router-dom";
-
+import { AuthContext } from '../../../contexts/AuthProvider';
+import { useContext } from 'react';
 
 export default function Login() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const navigate = useNavigate();
+  const { setIsAuthenticated } = useContext(AuthContext);
 
 
   const onSubmit = (data) => {
@@ -14,14 +17,13 @@ export default function Login() {
 
   };
 
-  
+
   // Create the useMutation hook
-  const { mutate } = useMutation(
-    // Pass the mutation function directly
+  const { mutate } = useMutation  (
     (body) => LoginAPI(body),
     {
       onSuccess: (data) => {
-        console.log('data', data);
+        setIsAuthenticated(true);
         navigate('/');
       },
       onError: (error) => {
@@ -55,9 +57,8 @@ export default function Login() {
               id="email"
               name="email"
               {...register('email', { required: 'Email is required', pattern: /^\S+@\S+$/i })}
-              className={`mt-1 p-3 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300 ${
-                errors.email ? 'border-red-500' : ''
-              }`}
+              className={`mt-1 p-3 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300 ${errors.email ? 'border-red-500' : ''
+                }`}
             />
             {errors.email && (
               <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
@@ -72,19 +73,24 @@ export default function Login() {
               id="password"
               name="password"
               {...register('password', { required: 'Password is required' })}
-              className={`mt-1 p-3 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300 ${
-                errors.password ? 'border-red-500' : ''
-              }`}
+              className={`mt-1 p-3 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300 ${errors.password ? 'border-red-500' : ''
+                }`}
             />
             {errors.password && (
               <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
             )}
-              <button
-            type="submit"
-            className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none relative group mt-4"
-          >
-            Login
-          </button>
+            <button
+              type="submit"
+              className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none relative group mt-4"
+            >
+              Login
+            </button>
+            <p className="mt-4">
+              Don't have an account?{' '}
+              <a href="/signup" className="text-blue-500 underline">
+                Register here
+              </a>
+            </p>
           </div>
         </form>
       </div>

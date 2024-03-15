@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import ProductCard from './components/ProductCard';
+import Banner from './components/Banner';
 
-export default function Home() {
+export const Home = () => {
   const sampleProducts = [
     {
       id: 1,
@@ -85,6 +86,7 @@ export default function Home() {
 
   return (
     <div>
+      <Banner />
       <div className="flex flex-wrap justify-center">
         {/* Displaying the first row with 4 products */}
         {currentProducts.slice(0, productsPerRow).map((product) => (
@@ -96,7 +98,7 @@ export default function Home() {
 
       <div className="flex flex-wrap justify-center mt-4">
         {/* Displaying the second row with the next 4 products */}
-        {currentProducts.slice(productsPerRow, productsPerPage).map((product) => (
+        {currentProducts.slice(productsPerRow).map((product) => (
           <div key={product.id} className="w-1/4 p-4">
             <ProductCard product={product} />
           </div>
@@ -108,11 +110,10 @@ export default function Home() {
           <button
             key={index + 1}
             onClick={() => handlePageChange(index + 1)}
-            className={`mx-2 px-4 py-2 border ${
-              currentPage === index + 1
+            className={`mx-2 px-4 py-2 border ${currentPage === index + 1
                 ? 'bg-blue-500 text-white'
                 : 'hover:bg-blue-500 hover:text-white'
-            }`}
+              }`}
           >
             {index + 1}
           </button>

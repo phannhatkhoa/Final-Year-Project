@@ -2,10 +2,10 @@ import { useMutation } from '@tanstack/react-query';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { RegisterAPI } from '../../../api/auth.api';
-import { toast } from 'react-toastify'
-import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
-const Register = () => {
+export const Register = ()=> {
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm();
 
@@ -15,10 +15,10 @@ const Register = () => {
     (body) => RegisterAPI(body),
     {
       onSuccess: (data) => {
-        navigate('/login');
+        navigate('/signin');
       },
       onError: (error) => {
-        toast.error('Failed to register user. Please try again.')
+        toast.error('Failed to register user. Please try again.');
       },
     }
   );
@@ -38,7 +38,6 @@ const Register = () => {
         />
       </div>
 
-      {/* Right Column - Registration Form */}
       <div className="lg:col-span-1 flex flex-col justify-center">
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">Create Your Account</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="relative group">
@@ -57,17 +56,17 @@ const Register = () => {
           </div>
 
           <div className="mb-4">
-            <label htmlFor="user_name" className="block text-sm font-medium text-gray-600">
-              Username
+            <label htmlFor="full_name" className="block text-sm font-medium text-gray-600">
+              Full Name
             </label>
             <input
               type="text"
-              id="user_name"
-              {...register('user_name', { required: 'Username is required' })}
+              id="full_name"
+              {...register('full_name', { required: 'Full Name is required' })}
               className="mt-1 p-3 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300"
               required
             />
-            {errors.user_name && <span className="text-red-500">{errors.user_name.message}</span>}
+            {errors.full_name && <span className="text-red-500">{errors.full_name.message}</span>}
           </div>
 
           <div className="mb-4">
@@ -98,6 +97,51 @@ const Register = () => {
             {errors.confirm_password && <span className="text-red-500">{errors.confirm_password.message}</span>}
           </div>
 
+          <div className="mb-4">
+            <label htmlFor="date_of_birth" className="block text-sm font-medium text-gray-600">
+              Date of Birth
+            </label>
+            <input
+              type="date"
+              id="date_of_birth"
+              {...register('date_of_birth', { required: 'Date of Birth is required' })}
+              className="mt-1 p-3 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300"
+              required
+            />
+            {errors.date_of_birth && <span className="text-red-500">{errors.date_of_birth.message}</span>}
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="location" className="block text-sm font-medium text-gray-600">
+              Location
+            </label>
+            <input
+              type="text"
+              id="location"
+              {...register('location', { required: 'Location is required' })}
+              className="mt-1 p-3 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300"
+              required
+            />
+            {errors.location && <span className="text-red-500">{errors.location.message}</span>}
+          </div>
+          <div className="mb-4">
+            <label htmlFor="gender" className="block text-sm font-medium text-gray-600">
+              Gender
+            </label>
+            <select
+              id="gender"
+              {...register('gender', { required: 'Gender is required' })}
+              className="mt-1 p-3 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300"
+              required
+            >
+              <option value="">Select Gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
+            {errors.gender && <span className="text-red-500">{errors.gender.message}</span>}
+          </div>
+
           <button
             type="submit"
             className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none relative group"
@@ -108,6 +152,4 @@ const Register = () => {
       </div>
     </div>
   );
-}
-
-export default Register;
+};

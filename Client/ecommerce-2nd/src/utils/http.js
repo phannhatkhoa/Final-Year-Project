@@ -13,6 +13,10 @@ class Http {
     // Add a request interceptor
     this.instance.interceptors.request.use(function (config) {
       console.log('config', config);
+      if(config.url === '/auth/signin' || config.url === '/auth/signup') {
+        delete config.headers.Authorization;
+      
+      }
       return config;
     }, function (error) {
       return Promise.reject(error);
