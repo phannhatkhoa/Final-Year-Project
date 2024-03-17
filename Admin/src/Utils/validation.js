@@ -1,8 +1,6 @@
 const express = require('express');
 const { validationResult } = require('express-validator');
-// can be reused by many routes
 
-// sequential processing, stops running validations chain if the previous one fails.
 const validate = validations => {
   return async (req, res, next) => {
     for (let validation of validations) {

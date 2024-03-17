@@ -1,13 +1,12 @@
 const databaseServices = require("../Services/database.connect");
 const userServices = require("../Services/user.services");
-const bcrypt = require('bcrypt');
+
+
 
 const signupController = async (req, res, next) => {
-    const { email, password, confirm_password, full_name, date_of_birth, location } = req.body;
-    const passwordHash = await bcrypt.hash(password, 10);
-    const insertedData = userServices.userRegister(email, passwordHash, confirm_password, full_name, date_of_birth, location);
+    const insertedData = await userServices.userRegister(req.body);
     if (insertedData) {
-        res.status(201).json({ message: "User created successfully" });
+        res.status(201).json({ message: "User created successfully", user: insertedData });
     } else {
         res.status(500).json({ message: "Internal server error" });
     }
@@ -15,19 +14,19 @@ const signupController = async (req, res, next) => {
 
 const signinController = async (req, res, next) => {
     const { email, password } = req.body;
-    const user = await databaseServices.userCollection.findOne({ email: email });
-    if (!user) {
-        res.status(401).json({ message: "Invalid email or password" });
-    } else {
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) {
-            res.status(401).json({ message: "Invalid email or password" });
-        } else {
-            res.status(200).json({ message: "Sign-in successful"});
-        }
-    }
+    const user = await userServices.userLogin(email, password);
+    console.log('abc', user);
+    return res.status(200).json({message: "Sign in successfull", user: user})
 }
+
+const profileController = async (req, res, next) => {
+        const { id } = req.body;
+        const result = await userServices.userProfile(id);
+        return res.status(200).json({message: "User profile", user: result});
+}
+
 module.exports = {
     signupController,
-    signinController
+    signinController,
+    profileController
 }

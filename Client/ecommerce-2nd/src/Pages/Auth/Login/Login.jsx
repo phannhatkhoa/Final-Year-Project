@@ -5,6 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 import { LoginAPI } from '../../../api/auth.api';
 import { AuthContext } from '../../../contexts/AuthProvider';
 import { useContext } from 'react';
+import { saveUserProfileFromLS } from '../../../utils/localStorage';
 
 export default function Login() {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -13,24 +14,25 @@ export default function Login() {
 
 
   const onSubmit = (data) => {
-    mutate(data); // This triggers the mutation and runs onSuccess/onError callbacks
-
+    mutateAsync(data);
   };
 
 
   // Create the useMutation hook
-  const { mutate } = useMutation  (
-    (body) => LoginAPI(body),
+  const { mutateAsync } = useMutation(
+    (body) => {return LoginAPI(body)},
     {
       onSuccess: (data) => {
+        console.log('Data:', data);
         setIsAuthenticated(true);
         navigate('/');
       },
       onError: (error) => {
-        console.log('error', error);
+        console.log('Error occurred:', error);
       },
     }
   );
+  
 
 
 

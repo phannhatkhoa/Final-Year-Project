@@ -1,6 +1,6 @@
 const express = require("express");
-const {signupController, signinController} = require("../Controllers/auth.controller");
-const { signupMiddleware, signinMiddleware } = require("../Middlewares/auth.middlewares");
+const {signupController, signinController, profileController} = require("../Controllers/auth.controller");
+const { signupMiddleware, signinMiddleware, profileMiddleware } = require("../Middlewares/auth.middlewares");
 
 
 const router = express.Router();
@@ -27,9 +27,7 @@ router.post("/signin", signinMiddleware, signinController);
 // Access: Private
 // Request: { token }
 // Response: { message: "User profile", user: { name, email}
-router.get("/profile", (req, res) => {
-    res.json({ message: "User profile", user: req.user });
-});
+router.get("/profile", profileMiddleware, profileController);
 
 
 module.exports = router;

@@ -3,9 +3,11 @@ import { Outlet, createBrowserRouter, Navigate } from 'react-router-dom';
 import { AuthContext } from './contexts/AuthProvider';
 import { HomeTemplate } from './templates/HomeTemplate';
 import { RegisterTemplate } from './templates/RegisterTemplate';
+import { ProfileTemplate } from './templates/ProfileTemplate';
 import { Home } from './Pages/HomePage/Home';
 import Login from './Pages/Auth/Login/Login';
-import { Register } from './Pages/Auth/Register/Register'; // Import as named export
+import { Register } from './Pages/Auth/Register/Register';
+import Profile from './Pages/Auth/Profile/Profile';
 
 const ProtectedRoutes = () => {
   const { isAuthenticated } = useContext(AuthContext);
@@ -22,7 +24,10 @@ export default function useRoutesElements() {
     {
       path: '',
       element: <ProtectedRoutes />,
-      children: [{ path: '/', element: <HomeTemplate><Home /></HomeTemplate> }]
+      children: [
+        { path: '/', element: <HomeTemplate><Home /></HomeTemplate> },
+        { path: 'profile', element: <ProfileTemplate><Profile /></ProfileTemplate> }
+      ]
     },
     {
       path: '/',
@@ -31,7 +36,7 @@ export default function useRoutesElements() {
         { path: 'signin', element: <RegisterTemplate><Login /></RegisterTemplate> },
         { path: 'signup', element: <RegisterTemplate><Register /></RegisterTemplate> }
       ]
-    },
+    }
   ]);
   return router;
 }

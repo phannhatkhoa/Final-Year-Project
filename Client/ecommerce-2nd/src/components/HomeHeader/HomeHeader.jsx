@@ -3,12 +3,14 @@ import { FaShoppingCart } from 'react-icons/fa';
 import { AuthContext } from '../../contexts/AuthProvider';
 import { useContext } from 'react';
 
+
 const Header = () => {
   const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
   const handleLogout = () => {
     setIsAuthenticated(false);
   };
 
+  const getUserProfile = JSON.parse(localStorage.getItem('user'));
   return (
     <header className="bg-gradient-to-r from-yellow-400 to-red-500 text-white py-4">
       <div className="container mx-auto flex justify-between items-center">
@@ -60,7 +62,7 @@ const Header = () => {
         <div className="flex items-center space-x-4">
           {isAuthenticated ? (
             <>
-              <p className="text-white">Hello.</p>
+              <p className="text-white">Hello {getUserProfile.email}</p>
               <button onClick={handleLogout} className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition duration-300">
                 Logout
               </button>

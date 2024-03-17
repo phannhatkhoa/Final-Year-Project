@@ -14,8 +14,7 @@ class Http {
     this.instance.interceptors.request.use(function (config) {
       console.log('config', config);
       if(config.url === '/auth/signin' || config.url === '/auth/signup') {
-        delete config.headers.Authorization;
-      
+        return config;
       }
       return config;
     }, function (error) {
@@ -24,8 +23,9 @@ class Http {
 
     // Add a response interceptor
     this.instance.interceptors.response.use(function (response) {
-      console.log(response)
+      console.log('response', response);
       alert(response.data?.message)
+      
     }, function (error) {
       return Promise.reject(error);
     });

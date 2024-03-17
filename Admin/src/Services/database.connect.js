@@ -5,7 +5,7 @@ const uri = 'mongodb+srv://khoapngcd201807:khoapngcd201807@ecommerce.lmrmstc.mon
 class DatabaseServices {
   constructor() {
     this.client = new MongoClient(uri);
-    this.db = this.client.db('test'); // Replace 'your_database_name' with your actual database name
+    this.db = this.client.db('test');
   }
 
   async connect() {
