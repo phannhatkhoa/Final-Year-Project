@@ -15,7 +15,7 @@ const signupMiddleware = validate(checkSchema({
       options: { min: 6 },
       errorMessage: 'Password must be at least 6 characters long',
     },
-    isStrongPassword:{
+    isStrongPassword: {
       errorMessage: 'Password must contain at least 1 lowercase, 1 uppercase, 1 number, and 1 special character',
       negated: {
       }
@@ -104,7 +104,7 @@ const signinMiddleware = validate(checkSchema({
 }));
 
 const profileMiddleware = validate(checkSchema({
-  id:{
+  id: {
     in: ['body'],
     notEmpty: true,
     isLength: {

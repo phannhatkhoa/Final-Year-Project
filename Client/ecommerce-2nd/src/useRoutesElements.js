@@ -8,6 +8,8 @@ import { Home } from './Pages/HomePage/Home';
 import Login from './Pages/Auth/Login/Login';
 import { Register } from './Pages/Auth/Register/Register';
 import Profile from './Pages/Auth/Profile/Profile';
+import { ProductDetailTemplate } from './templates/ProductDetailTemplate';
+import ProductDetail from './Pages/ProductDetail/ProductDetail';
 
 const ProtectedRoutes = () => {
   const { isAuthenticated } = useContext(AuthContext);
@@ -26,7 +28,8 @@ export default function useRoutesElements() {
       element: <ProtectedRoutes />,
       children: [
         { path: '/', element: <HomeTemplate><Home /></HomeTemplate> },
-        { path: 'profile', element: <ProfileTemplate><Profile /></ProfileTemplate> }
+        { path: 'profile', element: <ProfileTemplate><Profile /></ProfileTemplate> },
+        { path: 'product', element: <ProductDetailTemplate><ProductDetail /></ProductDetailTemplate>}
       ]
     },
     {

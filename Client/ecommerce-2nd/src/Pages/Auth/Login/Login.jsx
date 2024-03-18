@@ -1,45 +1,39 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
-import { LoginAPI } from '../../../api/auth.api';
 import { AuthContext } from '../../../contexts/AuthProvider';
-import { useContext } from 'react';
+import { LoginAPI } from '../../../api/auth.api';
 import { saveUserProfileFromLS } from '../../../utils/localStorage';
 
 export default function Login() {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors }, setError } = useForm();
   const navigate = useNavigate();
   const { setIsAuthenticated } = useContext(AuthContext);
 
-
-  const onSubmit = (data) => {
-    mutateAsync(data);
-  };
-
-
-  // Create the useMutation hook
-  const { mutateAsync } = useMutation(
-    (body) => {return LoginAPI(body)},
+  const mutation = useMutation(
+    (body) => LoginAPI(body),
     {
       onSuccess: (data) => {
-        console.log('Data:', data);
+        console.log('DataRes:', data);
         setIsAuthenticated(true);
         navigate('/');
+        saveUserProfileFromLS(data.data.user);
+        console.log('User:', data.data.user);
       },
       onError: (error) => {
         console.log('Error occurred:', error);
+        setError('email', { type: 'manual', message: 'Invalid email or password' });
       },
     }
   );
-  
 
-
-
+  const onSubmit = (data) => {
+    mutation.mutate(data);
+  };
 
   return (
     <div className="max-w-screen-xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 p-12 bg-white rounded-md shadow-md">
-      {/* Left Column - Images */}
       <div className="hidden lg:block">
         <img
           src="https://png.pngtree.com/thumb_back/fh260/background/20230704/pngtree-office-essentials-technology-and-gadgets-illustration-featuring-laptop-printer-camera-tablet-image_3748458.jpg"
@@ -59,8 +53,7 @@ export default function Login() {
               id="email"
               name="email"
               {...register('email', { required: 'Email is required', pattern: /^\S+@\S+$/i })}
-              className={`mt-1 p-3 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300 ${errors.email ? 'border-red-500' : ''
-                }`}
+              className={`mt-1 p-3 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300 ${errors.email ? 'border-red-500' : ''}`}
             />
             {errors.email && (
               <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
@@ -75,23 +68,21 @@ export default function Login() {
               id="password"
               name="password"
               {...register('password', { required: 'Password is required' })}
-              className={`mt-1 p-3 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300 ${errors.password ? 'border-red-500' : ''
-                }`}
+              className={`mt-1 p-3 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300 ${errors.password ? 'border-red-500' : ''}`}
             />
             {errors.password && (
               <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
             )}
             <button
               type="submit"
+              disabled={mutation.isLoading} 
               className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none relative group mt-4"
             >
-              Login
+              {mutation.isLoading ? 'Logging in...' : 'Login'}
             </button>
             <p className="mt-4">
               Don't have an account?{' '}
-              <a href="/signup" className="text-blue-500 underline">
-                Register here
-              </a>
+              <Link to="/signup" className="text-blue-500 underline">Register here</Link>
             </p>
           </div>
         </form>

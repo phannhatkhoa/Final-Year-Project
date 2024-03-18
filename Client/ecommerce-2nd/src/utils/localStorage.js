@@ -1,4 +1,5 @@
-export const saveUserProfileFromLS = (id, userProfile)=> {
+export const saveUserProfileFromLS = (userProfile)=> {
+  console.log('Userabc:', userProfile);
     // Convert userProfile to JSON string
     const userProfileString = JSON.stringify(userProfile);
     
@@ -6,7 +7,7 @@ export const saveUserProfileFromLS = (id, userProfile)=> {
     localStorage.setItem(`user`, userProfileString);
   }
   
-  export const getUserProfileFromLS=(id)=> {
+  export const getUserProfileFromLS=()=> {
     // Retrieve the userProfileString from localStorage using the user's ID
     const userProfileString = localStorage.getItem(`user`);
     
@@ -21,4 +22,19 @@ export const saveUserProfileFromLS = (id, userProfile)=> {
     localStorage.removeItem(`user`);
   }
 
+  export const saveTokenFromLS = (token)=> {
+    // Save the token in localStorage
+    localStorage.setItem('token', token);
+  }
+
+  export const getTokenFromLS = ()=> {
+    // Retrieve the token from localStorage
+    const token = localStorage.getItem('token');
+    return token;
+  }
+
+  export const deleteTokenFromLS = ()=> {
+    // Remove the token from localStorage
+    localStorage.removeItem('token');
+  }
   

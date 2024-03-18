@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { saveUserProfileFromLS } from './localStorage';
 
 class Http {
   constructor() {
@@ -11,24 +12,38 @@ class Http {
     });
 
     // Add a request interceptor
-    this.instance.interceptors.request.use(function (config) {
-      console.log('config', config);
-      if(config.url === '/auth/signin' || config.url === '/auth/signup') {
+    this.instance.interceptors.request.use(
+      function (config) {
+        if (config.url === '/auth/signin' || config.url === '/auth/signup') {
+          return config;
+        }
+        // Get token from localStorage and attach to headers if exists
+        const token = localStorage.getItem('token');
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
         return config;
+      },
+      function (error) {
+        // Do something with request error
+        return Promise.reject(error);
       }
-      return config;
-    }, function (error) {
-      return Promise.reject(error);
-    });
+    );
 
     // Add a response interceptor
-    this.instance.interceptors.response.use(function (response) {
-      console.log('response', response);
-      alert(response.data?.message)
-      
-    }, function (error) {
-      return Promise.reject(error);
-    });
+    this.instance.interceptors.response.use(
+      function (response) {
+        // Save token to localStorage if exists in response
+        if (response.data && response.data.token) {
+          const token = response.data.token;
+          localStorage.setItem('token', token);
+        }
+        return response;
+      },
+      function (error) {
+        return Promise.reject(error);
+      }
+    );
   }
 }
 

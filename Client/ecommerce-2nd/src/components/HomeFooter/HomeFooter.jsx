@@ -46,8 +46,7 @@ export default function HomeFooter() {
 
         <div className="mb-6 text-center">
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt distinctio earum...
-          </p>
+          2024 Ecommerce Website For Sell Used Product </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

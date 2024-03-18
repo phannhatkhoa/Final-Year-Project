@@ -27,7 +27,7 @@ class TokenManager {
         return { accessToken, refreshToken };
     }
 
-     decryptAccessToken(accessToken) {
+    decryptAccessToken(accessToken) {
         try {
             const decoded = jwt.verify(accessToken, this.secretKey);
             return decoded;

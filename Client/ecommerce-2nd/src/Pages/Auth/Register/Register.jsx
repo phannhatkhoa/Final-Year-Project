@@ -9,12 +9,11 @@ export const Register = ()=> {
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm();
 
-  // Create the useMutation hook
   const { mutate } = useMutation(
-    // Pass the mutation function directly
     (body) => RegisterAPI(body),
     {
       onSuccess: (data) => {
+        console.log('DataRes:', data);
         navigate('/signin');
       },
       onError: (error) => {
@@ -24,7 +23,7 @@ export const Register = ()=> {
   );
 
   const onSubmit = (data) => {
-    mutate(data); // This triggers the mutation and runs onSuccess/onError callbacks
+    mutate(data);
   };
 
   return (
