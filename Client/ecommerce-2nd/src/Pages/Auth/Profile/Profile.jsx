@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { ProfileAPI } from '../../../api/auth.api';
-import { useQuery } from '@tanstack/react-query';
+//import { ProfileAPI } from '../../../api/auth.api';
+//import { useQuery } from '@tanstack/react-query';
 
 const ProfilePage = () => {
     // const {

@@ -10,6 +10,10 @@ import { Register } from './Pages/Auth/Register/Register';
 import Profile from './Pages/Auth/Profile/Profile';
 import { ProductDetailTemplate } from './templates/ProductDetailTemplate';
 import ProductDetail from './Pages/ProductDetail/ProductDetail';
+import { CartTemplate } from './templates/CartTemplate';
+import ShoppingCart from './Pages/Cart/Cart';
+import { PaymentTemplate } from './templates/PaymentTemplate';
+import Payment from './Pages/Payment/Payment';
 
 const ProtectedRoutes = () => {
   const { isAuthenticated } = useContext(AuthContext);
@@ -29,7 +33,9 @@ export default function useRoutesElements() {
       children: [
         { path: '/', element: <HomeTemplate><Home /></HomeTemplate> },
         { path: 'profile', element: <ProfileTemplate><Profile /></ProfileTemplate> },
-        { path: 'product', element: <ProductDetailTemplate><ProductDetail /></ProductDetailTemplate>}
+        { path: 'product', element: <ProductDetailTemplate><ProductDetail /></ProductDetailTemplate>},
+        {path: 'cart', element: <CartTemplate><ShoppingCart /></CartTemplate>},
+        {path:'payment', element: <PaymentTemplate><Payment/></PaymentTemplate>},
       ]
     },
     {

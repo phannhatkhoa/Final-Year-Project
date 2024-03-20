@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaShoppingCart } from 'react-icons/fa';
 
-export default function ProductDetailHeader() {
+export default function CartHeader() {
 
   return (
     <header className="bg-gradient-to-r from-yellow-400 to-red-500 text-white py-4">
