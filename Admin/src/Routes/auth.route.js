@@ -1,6 +1,6 @@
 const express = require("express");
 const {signupController, signinController, profileController, updateProfileController} = require("../Controllers/auth.controller");
-const { signupMiddleware, signinMiddleware, profileMiddleware, updateProfile, updateProfileMiddleware } = require("../Middlewares/auth.middlewares");
+const { signupMiddleware, signinMiddleware } = require("../Middlewares/auth.middlewares");
 
 
 const router = express.Router();
@@ -28,6 +28,14 @@ router.post("/signin", signinMiddleware, signinController);
 // Request: { token }
 // Response: { message: "User profile", user: { name, email}
 router.get("/profile/:id", profileController);
+
+// Update user profile
+// Path: /user/profile/:id
+// Method: PUT
+// Access: Private
+// Request: { updatedData }
+// Response: { message: "Profile updated successfully" }
+router.put("/profile/:id", updateProfileController);
 
 
 

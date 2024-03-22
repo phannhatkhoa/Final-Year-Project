@@ -71,6 +71,18 @@ class UserServices {
             return null;
         }
     }
+    async updateProfile(id, updatedData) {
+        try {
+            await databaseServices.userCollection.updateOne(
+                { _id: new ObjectId(id) },
+                { $set: updatedData }
+            );
+            return { message: 'Profile updated successfully' };
+        } catch (error) {
+            console.error('Error during profile update:', error.message);
+            return null;
+        }
+    }
 }
 
 const userServices = new UserServices();
