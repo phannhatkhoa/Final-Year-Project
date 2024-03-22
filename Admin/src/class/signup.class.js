@@ -5,7 +5,7 @@ class UserRegister {
       this.confirm_password = confirm_password;
       this.full_name = full_name;
       this.date_of_birth = date_of_birth;
-      this.location = location;
+      this.location = location
     }
 }
 

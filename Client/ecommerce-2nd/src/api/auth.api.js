@@ -8,6 +8,15 @@ export const LoginAPI = (body) => {
   return httpConnection.post('/user/signin', body)
 }
 
-export const ProfileAPI = () => {
-  return httpConnection.get('/user/profile')
+export const ProfileAPI = (id) =>{
+  return httpConnection.get(`/user/profile/${id}`)
 }
+
+export const UpdateProfileAPI = async (body) => {
+  try {
+    const response = await httpConnection.put('/user/profile', body);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

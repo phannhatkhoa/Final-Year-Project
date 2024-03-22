@@ -16,14 +16,15 @@ const signinController = async (req, res, next) => {
     const { email, password } = req.body;
     const user = await userServices.userLogin(email, password);
     console.log('user', user)
-    return res.status(200).json({message: "Sign in successfull", ...user });
+    return res.status(200).json({ message: "Sign in successfull", ...user });
 }
 
 const profileController = async (req, res, next) => {
-    const { id } = req.body;
-    const result = await userServices.userProfile(id);
-    return res.status(200).json({ message: "User profile", user: result });
+    const user = await userServices.userProfile(req.params.id);
+    return res.status(200).json({ message: "User profile", body: user })
 }
+
+
 
 module.exports = {
     signupController,

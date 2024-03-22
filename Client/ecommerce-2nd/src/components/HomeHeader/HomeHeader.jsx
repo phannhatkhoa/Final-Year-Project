@@ -65,7 +65,7 @@ const Header = () => {
         <div className="flex items-center space-x-4">
           {isAuthenticated ? (
             <>
-              <p className="text-white">Hello {userProfile.email}</p>
+              <a href="/profile" className="text-white">Hello {userProfile.email}</a>
               <a href="/cart" className="text-yellow-500 hover:text-yellow-600">
                 <FaShoppingCart className="text-2xl" />
               </a>

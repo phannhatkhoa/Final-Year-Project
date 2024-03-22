@@ -1,4 +1,4 @@
-const { checkSchema } = require("express-validator");
+const { checkSchema, body } = require("express-validator");
 const validate = require("../Utils/validation");
 const databaseServices = require("../Services/database.connect");
 const passwordHash = require('password-hash');
@@ -54,16 +54,8 @@ const signupMiddleware = validate(checkSchema({
       errorMessage: 'Location must be at most 60 characters long',
     },
   },
-  gender: {
-    isIn: {
-      options: [['male', 'female', 'other']],
-      errorMessage: 'Invalid gender value',
-    },
-    notEmpty: {
-      errorMessage: 'Gender is required',
-    }
-  },
 }));
+
 
 const signinMiddleware = validate(checkSchema({
   email: {
@@ -103,34 +95,21 @@ const signinMiddleware = validate(checkSchema({
   },
 }));
 
-const profileMiddleware = validate(checkSchema({
-  id: {
-    in: ['body'],
+const accessTokenMiddleware = validate(checkSchema({
+  token: {
     notEmpty: true,
-    isLength: {
-      options: { min: 1 },
-      errorMessage: 'Id is required',
-    },
-    isMongoId: {
-      errorMessage: 'Invalid id'
-    },
+    errorMessage: 'Access token is required',
     custom: {
       options: async (value) => {
-        const user = await databaseServices.userCollection.findOne({ _id: new ObjectId(value) });
-        if (!user) {
-          throw new Error('User not found');
-        }
-        return true;
+        console.log('value', value);
       },
-      errorMessage: 'User not found'
     },
-  }
+  },
 }));
-
 
 
 module.exports = {
   signupMiddleware,
   signinMiddleware,
-  profileMiddleware
+  accessTokenMiddleware,
 };

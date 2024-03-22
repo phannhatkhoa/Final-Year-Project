@@ -123,24 +123,6 @@ export const Register = ()=> {
             />
             {errors.location && <span className="text-red-500">{errors.location.message}</span>}
           </div>
-          <div className="mb-4">
-            <label htmlFor="gender" className="block text-sm font-medium text-gray-600">
-              Gender
-            </label>
-            <select
-              id="gender"
-              {...register('gender', { required: 'Gender is required' })}
-              className="mt-1 p-3 w-full border rounded-md focus:outline-none focus:ring focus:border-blue-300"
-              required
-            >
-              <option value="">Select Gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="other">Other</option>
-            </select>
-            {errors.gender && <span className="text-red-500">{errors.gender.message}</span>}
-          </div>
-
           <button
             type="submit"
             className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none relative group"

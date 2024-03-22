@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt");
+
 const { generateToken } = require("../Configuration/jwtConfig");
 
 async function login(email, password) {
