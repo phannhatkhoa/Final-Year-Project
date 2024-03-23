@@ -14,6 +14,7 @@ import { CartTemplate } from './templates/CartTemplate';
 import ShoppingCart from './Pages/Cart/Cart';
 import { PaymentTemplate } from './templates/PaymentTemplate';
 import Payment from './Pages/Payment/Payment';
+import WelcomePage from './Pages/Welcome/Welcome';
 
 const ProtectedRoutes = () => {
   const { isAuthenticated } = useContext(AuthContext);
@@ -22,17 +23,18 @@ const ProtectedRoutes = () => {
 
 const RejectedRoutes = () => {
   const { isAuthenticated } = useContext(AuthContext);
-  return !isAuthenticated ? <Outlet /> : <Navigate to="/" />;
+  return !isAuthenticated ? <Outlet /> : <Navigate to="/home" />;
 };
 
 export default function useRoutesElements() {
   const router = createBrowserRouter([
     {
-      path: '',
+      path: '/',
       element: <ProtectedRoutes />,
       children: [
-        { path: '/', element: <HomeTemplate><Home /></HomeTemplate> },
-        { path: 'profile', element: <ProfileTemplate><Profile /></ProfileTemplate> },
+        {path:'welcome', element: <WelcomePage/>},
+        { path: 'home', element: <HomeTemplate><Home /></HomeTemplate> },
+        { path: '/user/profile', element: <ProfileTemplate><Profile /></ProfileTemplate> },
         { path: 'product', element: <ProductDetailTemplate><ProductDetail /></ProductDetailTemplate>},
         {path: 'cart', element: <CartTemplate><ShoppingCart /></CartTemplate>},
         {path:'payment', element: <PaymentTemplate><Payment/></PaymentTemplate>},

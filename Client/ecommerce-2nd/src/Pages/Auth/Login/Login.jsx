@@ -17,7 +17,7 @@ export default function Login() {
       onSuccess: (data) => {
         console.log('DataRes:', data);
         setIsAuthenticated(true);
-        navigate('/');
+        navigate('/home');
         saveUserProfileFromLS(data.data.user);
         console.log('User:', data.data.user);
       },
