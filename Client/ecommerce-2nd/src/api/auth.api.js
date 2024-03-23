@@ -12,9 +12,9 @@ export const ProfileAPI = (id) =>{
   return httpConnection.get(`/user/profile/${id}`)
 }
 
-export const UpdateProfileAPI = async (body) => {
+export const UpdateProfileAPI = async (id, body) => {
   try {
-    const response = await httpConnection.put('/user/profile', body);
+    const response = await httpConnection.put(`/user/profile/${id}`, body);
     return response.data;
   } catch (error) {
     throw error;
