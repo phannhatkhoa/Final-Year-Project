@@ -1,5 +1,6 @@
 const express = require("express");
 const authRoute = require("./src/Routes/auth.route");
+const productRoute = require("./src/Routes/product.route");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 
@@ -16,6 +17,7 @@ app.use(cors());
 databaseServices.connect();
 
 app.use("/user",authRoute);
+app.use("/product",productRoute);
 
 
 app.listen(PORT,()=>{
