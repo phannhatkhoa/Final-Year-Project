@@ -16,7 +16,7 @@ export default function CartHeader() {
         <nav className="flex space-x-4">
           <ul className="flex space-x-4">
             <li>
-              <a href="/" className="text-white hover:text-yellow-200 transition duration-300">
+              <a href="/home" className="text-white hover:text-yellow-200 transition duration-300">
                 Shop
               </a>
               <hr className="border-t-2 border-yellow-200" />

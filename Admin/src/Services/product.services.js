@@ -17,6 +17,18 @@ class ProductServices {
         }
     }
 
+    async getAllProducts(){
+        try {
+            // Fetch all products from the productCollection in the database
+            const products = await databaseServices.productCollection.find().toArray();
+            return products; 
+        } catch (error) {
+            console.error('Error during fetching products:', error.message);
+            return null;
+        }
+    }
+    
+
     async updateProduct(id, updatedProduct) {
         try {
 

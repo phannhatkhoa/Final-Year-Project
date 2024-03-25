@@ -27,7 +27,7 @@ const Header = () => {
         <nav className="flex space-x-4">
           <ul className="flex space-x-4">
             <li>
-              <a href="/shop" className="text-white hover:text-yellow-200 transition duration-300">
+              <a href="/home" className="text-white hover:text-yellow-200 transition duration-300">
                 Shop
               </a>
               <hr className="border-t-2 border-yellow-200" />
@@ -80,7 +80,7 @@ const Header = () => {
                   <FaShoppingCart className="mr-2" />
                 </button>
               </a>
-              <a href="/signin">
+              <a href="/user/signin">
                 <button className="text-white hover:text-yellow-200 transition duration-300">
                   Login
                 </button>

@@ -14,7 +14,7 @@ export const Register = () => {
     {
       onSuccess: (data) => {
         console.log('DataRes:', data);
-        navigate('/signin');
+        navigate('/user/signin');
       },
       onError: (error) => {
         toast.error('Failed to register user. Please try again.');
@@ -130,7 +130,7 @@ export const Register = () => {
           </button>
           <p className="mt-6 text-sm text-gray-600">
             Already have an account?{' '}
-            <Link to="/signin" className="text-blue-500 hover:underline">
+            <Link to="/user/signin" className="text-blue-500 hover:underline">
               Login here
             </Link>
           </p>

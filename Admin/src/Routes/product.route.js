@@ -1,5 +1,5 @@
 const express = require("express");
-const { createProductController, updateProductController, deleteProductController } = require("../Controllers/product.controller");
+const { createProductController, updateProductController, deleteProductController, getProductController } = require("../Controllers/product.controller");
 const { productUpdateMiddleware, productCreateMiddleware } = require("../Middlewares/product.middlewares");
 
 const router = express.Router();
@@ -10,6 +10,15 @@ const router = express.Router();
 //Request: { name, price, description, category, usage_status, image, current_quantity, quantity_sold  }
 //Response: { message: "Product created successfully", product: { name, price, description, category, usage_status, image, current_quantity, quantity_sold  } }
 router.post("/create",productCreateMiddleware, createProductController);
+
+
+// Get all products
+//path: product/getAll
+//method: GET
+//access: Public
+//Request: {}
+//Response: { products: [{ name, price, description, category, usage_status, image, current_quantity, quantity_sold }] }
+router.get("/getAll", getProductController);
 
 // Update product
 //path: product/update

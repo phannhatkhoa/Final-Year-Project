@@ -10,6 +10,20 @@ const createProductController = async (req, res) => {
     }
 }
 
+const getProductController = async (req, res) => {
+    try {
+        const products = await productServices.getAllProducts();
+        
+        if (products) {
+            return res.status(200).json({ data: { products } });
+        } else {
+            return res.status(500).json({ message: 'Internal server error' });
+        }
+    } catch (error) {
+        console.error('Error during fetching products:', error.message);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+};
 const updateProductController = async (req, res) => {
     const { id } = req.params;
     const updatedData = req.body;
@@ -35,6 +49,7 @@ const deleteProductController = async (req, res) => {
 
 module.exports = {
     createProductController,
+    getProductController,
     updateProductController,
     deleteProductController
 };

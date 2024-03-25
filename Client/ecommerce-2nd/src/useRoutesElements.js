@@ -23,29 +23,35 @@ const ProtectedRoutes = () => {
 
 const RejectedRoutes = () => {
   const { isAuthenticated } = useContext(AuthContext);
-  return !isAuthenticated ? <Outlet /> : <Navigate to="/home" />;
+  return !isAuthenticated ? <Outlet /> : null;;
 };
 
 export default function useRoutesElements() {
   const router = createBrowserRouter([
     {
       path: '/',
+      element: <Outlet />,
+      children: [
+        { path: 'welcome', element: <WelcomePage /> },
+        { path: 'user/signin', element: <RegisterTemplate><Login /></RegisterTemplate> },
+        { path: 'user/signup', element: <RegisterTemplate><Register /></RegisterTemplate> },
+        { path: 'home', element: <HomeTemplate><Home /></HomeTemplate> },
+        { path: 'product', element: <ProductDetailTemplate><ProductDetail /></ProductDetailTemplate> },
+      ]
+    },
+    {
+      path: '/',
       element: <ProtectedRoutes />,
       children: [
-        {path:'welcome', element: <WelcomePage/>},
-        { path: 'home', element: <HomeTemplate><Home /></HomeTemplate> },
-        { path: '/user/profile', element: <ProfileTemplate><Profile /></ProfileTemplate> },
-        { path: 'product', element: <ProductDetailTemplate><ProductDetail /></ProductDetailTemplate>},
-        {path: 'cart', element: <CartTemplate><ShoppingCart /></CartTemplate>},
-        {path:'payment', element: <PaymentTemplate><Payment/></PaymentTemplate>},
+        { path: 'user/profile', element: <ProfileTemplate><Profile /></ProfileTemplate> },
+        { path: 'cart', element: <CartTemplate><ShoppingCart /></CartTemplate> },
+        { path: 'payment', element: <PaymentTemplate><Payment /></PaymentTemplate> },
       ]
     },
     {
       path: '/',
       element: <RejectedRoutes />,
       children: [
-        { path: 'signin', element: <RegisterTemplate><Login /></RegisterTemplate> },
-        { path: 'signup', element: <RegisterTemplate><Register /></RegisterTemplate> }
       ]
     }
   ]);

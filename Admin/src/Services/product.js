@@ -1,4 +1,3 @@
-const Product = require('../Models/product.model');
 async function createProduct(productData) {
     try {
         const { name, price, description, category, usage_status, image, current_quantity, quantity_sold } = productData;

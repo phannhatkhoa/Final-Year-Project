@@ -95,7 +95,7 @@ export default function Login() {
           </button>
           <p className="mt-4">
             Don't have an account?{' '}
-            <Link to="/signup" className="text-blue-500 underline">Register here</Link>
+            <Link to="/user/signup" className="text-blue-500 underline">Register here</Link>
           </p>
         </div>
       </form>
