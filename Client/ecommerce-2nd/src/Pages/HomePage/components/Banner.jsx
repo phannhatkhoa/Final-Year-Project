@@ -22,7 +22,7 @@ const Banner = () => {
 
   useEffect(() => {
     fetchImage();
-  }, [currentImageIndex]);
+  }, [currentImageIndex],5000);
 
   const handlePrevClick = () => {
     setCurrentImageIndex((prevIndex) => (prevIndex === 0 ? images.length - 1 : prevIndex - 1));

@@ -8,3 +8,7 @@ export const getProductAPI = async () => {
     throw new Error(error.message);
   }
 };
+
+export const getProductByIdAPI = (id) => {
+  return httpConnection.get(`/product/getProduct/${id}`);
+}

@@ -32,11 +32,11 @@ export default function useRoutesElements() {
       path: '/',
       element: <Outlet />,
       children: [
-        { path: 'welcome', element: <WelcomePage /> },
+        { path: '', element: <WelcomePage /> },
         { path: 'user/signin', element: <RegisterTemplate><Login /></RegisterTemplate> },
         { path: 'user/signup', element: <RegisterTemplate><Register /></RegisterTemplate> },
         { path: 'home', element: <HomeTemplate><Home /></HomeTemplate> },
-        { path: 'product', element: <ProductDetailTemplate><ProductDetail /></ProductDetailTemplate> },
+        { path: `/product/getProduct/:productId`, element: <ProductDetailTemplate><ProductDetail /></ProductDetailTemplate> },
       ]
     },
     {

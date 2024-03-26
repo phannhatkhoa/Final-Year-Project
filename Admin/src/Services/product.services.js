@@ -27,7 +27,18 @@ class ProductServices {
             return null;
         }
     }
-    
+    async getProductById(id) {
+        try {
+            const product = await databaseServices.productCollection.findOne({ _id: new ObjectId(id) });
+            if (!product) {
+                throw new Error('Product not found');
+            }
+            return product;
+        } catch (error) {
+            console.error('Error during fetching product by id:', error.message);
+            return null;
+        }
+    }
 
     async updateProduct(id, updatedProduct) {
         try {

@@ -4,7 +4,6 @@ import { AuthContext } from '../../contexts/AuthProvider';
 import { useContext } from 'react';
 import { deleteUserProfileFromLS, getUserProfileFromLS } from '../../utils/localStorage';
 
-
 const Header = () => {
   const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
   const handleLogout = () => {
@@ -18,7 +17,7 @@ const Header = () => {
     <header className="bg-gradient-to-r from-yellow-400 to-red-500 text-white py-4">
       <div className="container mx-auto flex justify-between items-center">
         {/* Shopee logo */}
-        <div className="text-3xl font-extrabold">
+        <div className="text-3xl font-extrabold flex items-center">
           <span className="text-yellow-100">Ecomm</span>
           <span className="text-white">erce</span>
         </div>
@@ -30,7 +29,6 @@ const Header = () => {
               <a href="/home" className="text-white hover:text-yellow-200 transition duration-300">
                 Shop
               </a>
-              <hr className="border-t-2 border-yellow-200" />
             </li>
             <li>
               <a href="/phones" className="text-white hover:text-yellow-200 transition duration-300">
@@ -51,13 +49,11 @@ const Header = () => {
         </nav>
 
         {/* Search bar */}
-        <div className="ml-4 relative">
+        <div className="relative hidden md:block">
           <input
             type="text"
-            placeholder="Search for products..."
-            //value={searchQuery}
-            //onChange={handleSearchChange}
-            className="w-full p-2 border border-gray-400 border-opacity-50 rounded focus:outline-none focus:border-purple-500 text-black bg-gray-200 placeholder-gray-500 text-sm"
+            placeholder="Search products..."
+            className="block w-full p-3 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 transition duration-300 ease-in-out"
           />
         </div>
 

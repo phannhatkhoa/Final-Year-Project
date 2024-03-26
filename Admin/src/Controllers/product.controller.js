@@ -24,6 +24,17 @@ const getProductController = async (req, res) => {
         return res.status(500).json({ message: 'Internal server error' });
     }
 };
+
+const getProductByIdController = async (req, res) => {
+    const { id } = req.params;
+    const product = await productServices.getProductById(id);
+    if (product) {
+        res.status(200).json({ data: { product } });
+    } else {
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
 const updateProductController = async (req, res) => {
     const { id } = req.params;
     const updatedData = req.body;
@@ -50,6 +61,7 @@ const deleteProductController = async (req, res) => {
 module.exports = {
     createProductController,
     getProductController,
+    getProductByIdController,
     updateProductController,
     deleteProductController
 };
