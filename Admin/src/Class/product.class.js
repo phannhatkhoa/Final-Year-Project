@@ -7,7 +7,7 @@ class Product {
         this.usage_status = usage_status;
         this.image = image;
         this.current_quantity = current_quantity;
-        this.current_quantity = current_quantity;
+        this.quantity_sold = quantity_sold;
     }
 }
 

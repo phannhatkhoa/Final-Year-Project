@@ -25,6 +25,12 @@ class DatabaseServices {
   get productCollection(){
     return this.db.collection('products');
   }
+  get cartCollection(){
+    return this.db.collection('cart');
+  }
+  get paymentCollection(){
+    return this.db.collection('payment');
+  }
 }
 
 const databaseServices = new DatabaseServices();

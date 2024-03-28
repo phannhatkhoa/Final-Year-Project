@@ -27,7 +27,7 @@ const Header = () => {
           <ul className="flex space-x-4">
             <li>
               <a href="/home" className="text-white hover:text-yellow-200 transition duration-300">
-                Shop
+                Home  
               </a>
             </li>
             <li>
