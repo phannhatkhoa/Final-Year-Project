@@ -1,13 +1,18 @@
+import { useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react';
+import { getCartAPI } from '../../api/cart.api';
 
 const ShoppingCart = () => {
-    const [cart, setCart] = useState([
-        { id: 1, name: 'Product 1', price: 10, quantity: 1 },
-        { id: 2, name: 'Product 2', price: 15, quantity: 1 },
-    ]);
+    const {data: cartData} = useQuery({
+        queryKey: ['cart'],
+        queryFn: () => getCartAPI()
+    });
 
-    const [selectedDeliveryOption, setSelectedDeliveryOption] = useState('DPD'); // Default delivery option
-    const [shippingFee, setShippingFee] = useState(8); // Default shipping fee for DPD
+
+    const [cart, setCart] = useState([]); 
+
+    const [selectedDeliveryOption, setSelectedDeliveryOption] = useState('DPD');
+    const [shippingFee, setShippingFee] = useState(8);
 
     const handleQuantityChange = (id, value) => {
         setCart(prevCart =>
@@ -20,7 +25,6 @@ const ShoppingCart = () => {
     const handleDeliveryOptionChange = (event) => {
         const option = event.target.value;
         setSelectedDeliveryOption(option);
-        // Update shipping fee based on the selected delivery option
         switch (option) {
             case 'DPD':
                 setShippingFee(8);
@@ -37,6 +41,7 @@ const ShoppingCart = () => {
         }
     };
 
+    // Calculate subtotal and totalAmount based on cart state
     const subtotal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
     const totalAmount = subtotal + shippingFee;
 

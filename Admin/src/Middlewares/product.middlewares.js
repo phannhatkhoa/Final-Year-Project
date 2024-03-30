@@ -23,7 +23,7 @@ const productCreateMiddleware = validate(checkSchema({
         notEmpty: true,
         errorMessage: 'Description is required and must be a string.'
     },
-    category: {
+    category_id: {
         in: ['body'],
         isString: true,
         notEmpty: true,
@@ -52,13 +52,11 @@ const productCreateMiddleware = validate(checkSchema({
     }
 }));
 
-
-const productUpdateMiddleware = validate(checkSchema( {
+const productUpdateMiddleware = validate(checkSchema({
     name: {
         in: ['body'],
-        isString: true,
-        notEmpty: true,
-        errorMessage: 'Name is required and must be a string.'
+        isString: { errorMessage: 'Name must be a string.' },
+        optional: true 
     },
     price: {
         in: ['body'],
@@ -66,16 +64,14 @@ const productUpdateMiddleware = validate(checkSchema( {
             options: { min: 0 },
             errorMessage: 'Price must be a positive number.'
         },
-        notEmpty: true,
-        errorMessage: 'Price is required.'
+        optional: true 
     },
     description: {
         in: ['body'],
-        isString: true,
-        notEmpty: true,
-        errorMessage: 'Description is required and must be a string.'
+        isString: { errorMessage: 'Description must be a string.' },
+        optional: true 
     },
-    category: {
+    category_id: {
         in: ['body'],
         isString: true,
         notEmpty: true,
@@ -89,9 +85,8 @@ const productUpdateMiddleware = validate(checkSchema( {
     },
     image: {
         in: ['body'],
-        isString: true,
-        notEmpty: true,
-        errorMessage: 'Image URL is required and must be a string.'
+        isString: { errorMessage: 'Image URL must be a string.' },
+        optional: true
     },
     current_quantity: {
         in: ['body'],
@@ -99,8 +94,7 @@ const productUpdateMiddleware = validate(checkSchema( {
             options: { min: 0 },
             errorMessage: 'Current quantity must be a non-negative integer.'
         },
-        notEmpty: true,
-        errorMessage: 'Current quantity is required.'
+        optional: true 
     },
     quantity_sold: {
         in: ['body'],
@@ -108,9 +102,8 @@ const productUpdateMiddleware = validate(checkSchema( {
             options: { min: 0 },
             errorMessage: 'Quantity sold must be a non-negative integer.'
         },
-        notEmpty: true,
-        errorMessage: 'Quantity sold is required.'
+        optional: true 
     }
 }));
 
-module.exports = { productCreateMiddleware,productUpdateMiddleware};
+module.exports = { productCreateMiddleware, productUpdateMiddleware };

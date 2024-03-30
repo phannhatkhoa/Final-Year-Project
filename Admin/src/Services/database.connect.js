@@ -31,6 +31,12 @@ class DatabaseServices {
   get paymentCollection(){
     return this.db.collection('payment');
   }
+  get categoryCollection(){
+    return this.db.collection('category');
+  }
+  get brandCollection(){
+    return this.db.collection('brand');
+  }
 }
 
 const databaseServices = new DatabaseServices();
