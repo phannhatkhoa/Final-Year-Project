@@ -1,13 +1,13 @@
-import ProfileFooter from "../Pages/Auth/Profile/components/ProfileFooter"
-import ProfileHeader from "../Pages/Auth/Profile/components/ProfileHeader"
+import AdminFooter from "../Pages/Auth/Admin/components/Footer"
+import AdminHeader from "../Pages/Auth/Admin/components/Header"
 
 
 export const AdminTemplate = ({ children }) => {
     return (
         <>
-            <ProfileHeader />
+            <AdminHeader/>
             {children}
-            <ProfileFooter />
+            <AdminFooter />
         </>
     )
 }

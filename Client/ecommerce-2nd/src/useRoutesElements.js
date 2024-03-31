@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Outlet, createBrowserRouter, Navigate } from 'react-router-dom';
 import { AuthContext } from './contexts/AuthProvider';
 import { HomeTemplate } from './templates/HomeTemplate';
@@ -17,6 +17,7 @@ import Payment from './Pages/Payment/Payment';
 import WelcomePage from './Pages/Welcome/Welcome';
 import { UserPage } from './Pages/Auth/Admin/DisplayUser';
 import { AdminTemplate } from './templates/AdminTemplate';
+import { DisplayProduct } from './Pages/Auth/Admin/DisplayProduct';
 
 const ProtectedRoutes = () => {
   const { isAuthenticated } = useContext(AuthContext);
@@ -56,7 +57,8 @@ export default function useRoutesElements() {
       path: '/',
       element: <RejectedRoutes />,
       children: [
-        { path: 'admin/getUser', element: <AdminTemplate><UserPage /></AdminTemplate> }
+        { path: 'admin/getUser', element: <AdminTemplate><UserPage /></AdminTemplate> },
+        { path: 'admin/getProducts', element: <AdminTemplate><DisplayProduct /></AdminTemplate>}
       ]
     }
   ]);

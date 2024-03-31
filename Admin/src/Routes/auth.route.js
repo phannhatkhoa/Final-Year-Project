@@ -37,19 +37,4 @@ router.get("/profile/:id", profileController);
 // Response: { message: "Profile updated successfully" }
 router.put("/profile/:id", updateProfileController);
 
-// //get all users for admin
-// // Path: /user/all
-// // Method: GET
-// // Access: Private
-// // Request: { token }
-// // Response: { message: "All users", users: { name, email}
-// router.get("/all", getAllUsersController);
-
-// // update user for admin
-// // Path: /user/update/:id
-// // Method: PUT
-// // Access: Private
-// // Request: { updatedData }
-// // Response: { message: "User updated successfully" }
-// router.put("/update/:id", updateUserController);
 module.exports = router;

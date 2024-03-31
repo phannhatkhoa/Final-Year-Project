@@ -9,9 +9,28 @@ export const getAllUserAPI = async () => {
     }
 };
 
-export const updateUserRoleAPI = async (id, body) => {
+export const updateUserRoleAPI = async (id, newRole) => {
     try {
-        const response = await httpConnection.put(`/admin/updateUserRole/${id}`, body);
+        const response = await httpConnection.put(`/admin/updateRole/${id}`, { role: newRole });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+
+export const getAllProductAPI = async () => {
+    try {
+        const response = await httpConnection.get('/admin/getProducts');
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const deleteUserAPI = async (id) => {
+    try {
+        const response = await httpConnection.delete(`/admin/deleteUser/${id}`);
         return response.data;
     } catch (error) {
         throw error;

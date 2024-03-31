@@ -1,22 +1,53 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getAllUserAPI } from "../../../api/admin.api";
+import { deleteUserAPI, getAllUserAPI, updateUserRoleAPI } from "../../../api/admin.api";
 
 export const UserPage = () => {
-    const { data } = useQuery({
+    const { data, refetch } = useQuery({
         queryKey: ['users'],
         queryFn: getAllUserAPI
     });
 
-    const handleEdit = () => {
-        console.log('Edit user');
-    }
+    console.log('Data:', data);
 
-    const handleDelete = (id) => {
-        console.log(`Delete user with id: ${id}`);
-    }
+    const [selectedUserId, setSelectedUserId] = useState(null);
+    const [showRoleOptions, setShowRoleOptions] = useState(false);
+
+    const handleEdit = (id) => {
+        setSelectedUserId(id);
+        setShowRoleOptions(true);
+    };
+
+    const handleRoleSelection = async (role) => {
+        if (selectedUserId) {
+            try {
+                await updateUserRoleAPI(selectedUserId, role);
+                await refetch();
+            } catch (error) {
+                console.log('Error:', error);
+            }
+        }
+        setShowRoleOptions(false);
+        setSelectedUserId(null);
+    };
+
+    const handleDelete = async (id) => {
+        console.log('Delete user:', id);
+        try {
+            await deleteUserAPI(id);
+            await refetch();
+        } catch (error) {
+            console.log('Error:', error);
+        }
+    };
+    const handleCancel = () => {
+        setShowRoleOptions(false);
+        setSelectedUserId(null);
+    };
 
     return (
         <div className="overflow-x-auto">
+            <h1 className="text-2xl font-bold text-center mb-4">Manage User</h1>
             <table className="min-w-full table-auto">
                 <thead>
                     <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
@@ -39,13 +70,13 @@ export const UserPage = () => {
                             <td className="py-3 px-6 text-left space-x-2">
                                 <button
                                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                                    onClick={() => handleEdit(user)}
+                                    onClick={() => handleEdit(user._id)}
                                 >
                                     Edit
                                 </button>
                                 <button
-                                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                                    onClick={() => handleDelete(user.id)}
+                                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2"
+                                    onClick={() => handleDelete(user._id)}
                                 >
                                     Delete
                                 </button>
@@ -54,6 +85,35 @@ export const UserPage = () => {
                     ))}
                 </tbody>
             </table>
+            {showRoleOptions && (
+                <div className="fixed top-0 left-0 h-full w-full flex justify-center items-center">
+                    <div className="bg-white rounded-lg shadow-lg p-8 max-w-md">
+                        <h2 className="text-lg font-bold mb-4">Select Role</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <button
+                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                onClick={() => handleRoleSelection('admin')}
+                            >
+                                Admin
+                            </button>
+                            <button
+                                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                                onClick={() => handleRoleSelection('customer')}
+                            >
+                                Customer
+                            </button>
+                        </div>
+                        <div className="mt-4 flex justify-center">
+                            <button
+                                className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
+                                onClick={handleCancel}
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
-}
+};

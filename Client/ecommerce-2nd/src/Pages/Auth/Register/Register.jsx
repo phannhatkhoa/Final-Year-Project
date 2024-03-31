@@ -23,8 +23,10 @@ export const Register = () => {
   );
 
   const onSubmit = (data) => {
-    mutate(data);
+    const formData = { ...data, role: 'customer' };
+    mutate(formData);
   };
+  
 
   return (
     <div className="max-w-screen-xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 p-12 bg-white rounded-md shadow-md">
