@@ -20,3 +20,4 @@ export const UpdateProfileAPI = async (id, body) => {
     throw error;
   }
 };
+

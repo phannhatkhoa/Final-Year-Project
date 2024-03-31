@@ -1,5 +1,6 @@
 const express = require("express");
 const authRoute = require("./src/Routes/auth.route");
+const adminRoute = require("./src/Routes/admin.route");
 const productRoute = require("./src/Routes/product.route");
 const cartRoute = require("./src/Routes/cart.route");
 const paymentRoute = require("./src/Routes/payment.route");
@@ -21,6 +22,7 @@ app.use(cors());
 databaseServices.connect();
 
 app.use("/user",authRoute);
+app.use("/admin",adminRoute)
 app.use("/product",productRoute);
 app.use("/cart",cartRoute);
 app.use("/cart",paymentRoute);

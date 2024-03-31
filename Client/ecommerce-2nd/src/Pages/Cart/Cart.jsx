@@ -5,13 +5,28 @@ import { getCartAPI } from '../../api/cart.api';
 const ShoppingCart = () => {
     const {data: cartData} = useQuery({
         queryKey: ['cart'],
-        queryFn: () => getCartAPI()
+        queryFn: () => getCartAPI(),
+        onSuccess: (data) => {
+            console.log(data); // Log the fetched data
+            console.log(data.cart); // Log the cart data specifically
+        }
     });
+    
+    console.log(cartData);
 
 
-    const [cart, setCart] = useState([]); 
+    const [cart, setCart] = useState(cartData ? cartData.cart : []);
+    useState(() => {
+        if (cartData) {
+            setCart(cartData.cart);
+        }
+    }, [cartData]);
+    console.log(cart);
 
-    const [selectedDeliveryOption, setSelectedDeliveryOption] = useState('DPD');
+
+    
+
+    const [selectedDeoliveryOption, setSelectedDeliveryOption] = useState('DPD');
     const [shippingFee, setShippingFee] = useState(8);
 
     const handleQuantityChange = (id, value) => {
@@ -23,9 +38,9 @@ const ShoppingCart = () => {
     };
 
     const handleDeliveryOptionChange = (event) => {
-        const option = event.target.value;
-        setSelectedDeliveryOption(option);
-        switch (option) {
+        const selectedDeoliveryOption = event.target.value;
+        setSelectedDeliveryOption(selectedDeoliveryOption);
+        switch (selectedDeoliveryOption) {
             case 'DPD':
                 setShippingFee(8);
                 break;

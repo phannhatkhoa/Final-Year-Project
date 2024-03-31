@@ -9,6 +9,13 @@ export const getProductAPI = async () => {
   }
 };
 
-export const getProductByIdAPI = (id) => {
-  return httpConnection.get(`/product/getProduct/${id}`);
-}
+export const getProductByIdAPI = async (id) => {
+  try {
+    const response = await httpConnection.get(`/product/getProduct/${id}`);
+    return response;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+

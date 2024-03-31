@@ -27,19 +27,22 @@ const profileController = async (req, res, next) => {
 const updateProfileController = async (req, res, next) => {
     const { id } = req.params;
     const updatedData = req.body;
-  
+
     const result = await userServices.updateProfile(id, updatedData);
-  
+
     if (result) {
-      res.status(200).json({ message: 'Profile updated successfully' });
+        res.status(200).json({ message: 'Profile updated successfully' });
     } else {
-      res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: 'Internal server error' });
     }
-  }
+}
+
+
+
 
 module.exports = {
     signupController,
     signinController,
     profileController,
-    updateProfileController
+    updateProfileController,
 }

@@ -24,6 +24,15 @@ const getCategoryController = async (req, res) => {
     }
 }
 
+const getProductByCategoryController = async (req, res) => {
+    const { id } = req.params;
+    const products = await categoryServices.getProductByCategory(id);
+    if (products) {
+        res.status(200).json({ data: { products } });
+    } else {
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
 const updateCategoryController = async (req, res) => {
     const { id } = req.params;
     const updatedData = req.body;
@@ -36,4 +45,4 @@ const updateCategoryController = async (req, res) => {
 
 }
 
-module.exports = { createCategoryController, getCategoryController,updateCategoryController};
+module.exports = { createCategoryController, getCategoryController,updateCategoryController, getProductByCategoryController};

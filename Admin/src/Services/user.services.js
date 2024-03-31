@@ -7,7 +7,7 @@ const tokenManager = require('../Utils/token');
 class UserServices {
     async userRegister(body) {
         try {
-            const { email, password, full_name, date_of_birth, location } = body;
+            const { email, password, full_name, date_of_birth, location, role } = body;
             const hashedPassword = passwordHash.generate(password);
 
             const newUser = {
@@ -15,7 +15,8 @@ class UserServices {
                 password: hashedPassword,
                 full_name,
                 date_of_birth,
-                location
+                location,
+                role
             };
 
             await databaseServices.userCollection.insertOne(newUser);
@@ -25,6 +26,7 @@ class UserServices {
                 id: decodedToken.id,
                 email: decodedToken.email,
                 full_name: decodedToken.full_name,
+                role: decodedToken.role
             };
 
             return { ...signToken, user };
@@ -50,6 +52,7 @@ class UserServices {
                 id: decodedToken.id,
                 email: decodedToken.email,
                 full_name: decodedToken.full_name,
+                role: decodedToken.role
             };
 
             return { ...signToken, user };
@@ -80,6 +83,19 @@ class UserServices {
             return { message: 'Profile updated successfully' };
         } catch (error) {
             console.error('Error during profile update:', error.message);
+            return null;
+        }
+    }
+
+    async updateUser (id, updatedData) {
+        try {
+            await databaseServices.userCollection.updateOne(
+                { _id: new ObjectId(id) },
+                { $set: updatedData }
+            );
+            return { message: 'User updated successfully' };
+        } catch (error) {
+            console.error('Error during user update:', error.message);
             return null;
         }
     }

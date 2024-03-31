@@ -6,14 +6,18 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(
     localStorage.getItem("isAuthenticated") === "true"
   );
+  const [userRole, setUserRole] = useState(
+    localStorage.getItem("userRole") || "customer" // Default role is "customer"
+  );
 
   useEffect(() => {
-    // Update localStorage whenever isAuthenticated changes
+    // Update localStorage whenever isAuthenticated or userRole changes
     localStorage.setItem("isAuthenticated", isAuthenticated);
-  }, [isAuthenticated]);
+    localStorage.setItem("userRole", userRole);
+  }, [isAuthenticated, userRole]);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
+    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, userRole, setUserRole }}>
       {children}
     </AuthContext.Provider>
   );

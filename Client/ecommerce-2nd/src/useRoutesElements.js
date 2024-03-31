@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Outlet, createBrowserRouter, Navigate } from 'react-router-dom';
 import { AuthContext } from './contexts/AuthProvider';
 import { HomeTemplate } from './templates/HomeTemplate';
@@ -15,15 +15,18 @@ import ShoppingCart from './Pages/Cart/Cart';
 import { PaymentTemplate } from './templates/PaymentTemplate';
 import Payment from './Pages/Payment/Payment';
 import WelcomePage from './Pages/Welcome/Welcome';
+import { UserPage } from './Pages/Auth/Admin/DisplayUser';
+import { AdminTemplate } from './templates/AdminTemplate';
 
 const ProtectedRoutes = () => {
   const { isAuthenticated } = useContext(AuthContext);
-  return isAuthenticated ? <Outlet /> : <Navigate to="/signin" />;
+  return isAuthenticated ? <Outlet /> : <Navigate to="/user/signin" />;
 };
 
 const RejectedRoutes = () => {
-  const { isAuthenticated } = useContext(AuthContext);
-  return !isAuthenticated ? <Outlet /> : null;;
+  const { isAuthenticated, userRole } = useContext(AuthContext);
+  // Check if user is authenticated and has admin role to access rejected routes
+  return isAuthenticated && userRole === 'admin' ? <Outlet /> : <Navigate to="/home" />;
 };
 
 export default function useRoutesElements() {
@@ -44,14 +47,16 @@ export default function useRoutesElements() {
       element: <ProtectedRoutes />,
       children: [
         { path: 'user/profile', element: <ProfileTemplate><Profile /></ProfileTemplate> },
-        { path: 'cart', element: <CartTemplate><ShoppingCart /></CartTemplate> },
+        { path: 'cart/getCart', element: <CartTemplate><ShoppingCart /></CartTemplate> },
         { path: 'payment', element: <PaymentTemplate><Payment /></PaymentTemplate> },
+        
       ]
     },
     {
       path: '/',
       element: <RejectedRoutes />,
       children: [
+        { path: 'admin/getUser', element: <AdminTemplate><UserPage /></AdminTemplate> }
       ]
     }
   ]);

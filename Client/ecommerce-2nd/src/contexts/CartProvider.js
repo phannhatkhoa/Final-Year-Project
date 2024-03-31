@@ -17,7 +17,8 @@ const CartProvider = ({ children }) => {
             value={{
                 cart,
                 addToCart,
-                removeFromCart
+                removeFromCart,
+                setCart
             }}
         >
             {children}

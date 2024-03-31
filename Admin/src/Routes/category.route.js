@@ -1,5 +1,5 @@
 const express = require("express");
-const { createCategoryController, getCategoryController, updateCategoryController } = require("../Controllers/category.controller");
+const { createCategoryController, getCategoryController, updateCategoryController, getProductByCategoryController } = require("../Controllers/category.controller");
 const router = express.Router();
 
 // create category
@@ -17,6 +17,14 @@ router.post("/create", createCategoryController);
 // Request: {}
 // Response: { data: { categories: [{ name }] } }
 router.get("/getAll", getCategoryController);
+
+// get product by category
+// path: category/getProduct
+// method: GET
+// access: Public
+// Request: { id }
+// Response: { data: { products: [{ name, price, description, category, usage_status, image, current_quantity, quantity_sold }] } }
+router.get("/getProduct/:id", getProductByCategoryController);
 
 // update category
 // path: category/update

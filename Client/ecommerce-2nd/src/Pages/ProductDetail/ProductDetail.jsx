@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState }  from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getProductByIdAPI } from '../../api/product.api';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const ProductDetail = () => {
+    const navigate = useNavigate();
     const { productId } = useParams();
     const { data: productData, isSuccess } = useQuery({
         queryKey: ['products', productId],
@@ -13,11 +14,16 @@ const ProductDetail = () => {
     const product = productData?.data?.data?.product;
     console.log(product);
 
+    const [cart, setCart] = useState([]);
     const handleAddToCart = () => {
         if (isSuccess && product) {
+            navigate('/cart/getCart');
+            setCart(prevCart => [...prevCart, product]);
             console.log(`Added to the cart: ${product.name}`);
+            
         }
     };
+    console.log(handleAddToCart);
 
     const handleBuyNow = () => {
         if (isSuccess && product) {
@@ -38,13 +44,15 @@ const ProductDetail = () => {
                         </div>
                         <div className="lg:col-span-2 flex flex-col justify-between">
                             <div className="bg-gray-100 rounded-lg p-6 shadow-md">
-                                <h3 className="text-2xl font-extrabold text-gray-800 mb-4">Product Name: {product.name}</h3>
-                                <p className="text-gray-700 mb-2">Product Description: {product.description}</p>
+                                <h3 className="text-3xl font-extrabold text-gray-800 mb-4">{product.name}</h3>
+                                <p className="text-gray-700 mb-4">{product.description}</p>
                                 <div className="flex justify-between items-center mb-4">
-                                    <p className="text-gray-700">Category: {product.category.name}</p>
-                                    <p className="text-gray-700">Brand: {product.brand.name}</p>
+                                    <p className="text-gray-700">Category: <span className="font-semibold">{product.category.name}</span></p>
+                                    <p className="text-gray-700">Brand: <span className="font-semibold">{product.brand.name}</span></p>
+                                    <p className="text-gray-700">Status: <span className="font-semibold">{product.usage_status}</span></p>
+                                    <p className="text-gray-700">Sold: <span className="font-semibold">{product.quantity_sold}</span></p>
                                 </div>
-                                <h3 className="text-lg font-bold text-gray-900 mb-4">Price: ${product.price}</h3>
+                                <h3 className="text-xl font-bold text-gray-900 mb-4">Price: <span className="text-green-600">${product.price}</span></h3>
                             </div>
                             <div className="mt-10">
                                 <button onClick={handleBuyNow} type="button" className="w-full px-4 py-3 bg-gray-800 hover:bg-gray-700 text-white text-sm font-bold rounded-lg transition-colors duration-300 mb-2">Buy now</button>

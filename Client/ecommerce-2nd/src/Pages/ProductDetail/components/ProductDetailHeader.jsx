@@ -20,17 +20,24 @@ export default function ProductDetailHeader() {
         <nav className="flex space-x-4">
           <ul className="flex space-x-4">
             <li>
-              <a href="/home" className="text-white hover:text-yellow-200 transition duration-300">Shop</a>
-              <hr className="border-t-2 border-yellow-200" />
+              <a href="/home" className="text-white hover:text-yellow-200 transition duration-300">
+                Home  
+              </a>
             </li>
             <li>
-              <a href="/phones" className="text-white hover:text-yellow-200 transition duration-300">Phone</a>
+              <a href="/product/phone" className="text-white hover:text-yellow-200 transition duration-300">
+                Phone
+              </a>
             </li>
             <li>
-              <a href="/tablets" className="text-white hover:text-yellow-200 transition duration-300">Tablet</a>
+              <a href="/tablets" className="text-white hover:text-yellow-200 transition duration-300">
+                Tablet
+              </a>
             </li>
             <li>
-              <a href="/laptops" className="text-white hover:text-yellow-200 transition duration-300">Laptop</a>
+              <a href="/laptops" className="text-white hover:text-yellow-200 transition duration-300">
+                Laptop
+              </a>
             </li>
           </ul>
         </nav>
