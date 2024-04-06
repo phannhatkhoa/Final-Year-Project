@@ -19,7 +19,6 @@ export default function Login() {
         setIsAuthenticated(true);
         const userRole = data?.data?.user?.role;
         setUserRole(userRole);
-
         if (userRole === 'admin') {
           navigate('/admin/getUser');
         } else if (userRole === 'customer') {
