@@ -12,7 +12,7 @@ export default function AuthHeader() {
 <header className="bg-gray-900 text-white py-4">
       <div className="container mx-auto flex justify-between items-center">
         <div className="flex items-center">
-          <h1 className="text-2xl font-bold">YourLogo</h1>
+          <h1 className="text-2xl font-bold">Ecommerce</h1>
         </div>
 
         <div className="hidden md:flex space-x-4">
@@ -33,7 +33,7 @@ export default function AuthHeader() {
       {isOpen && (
         <div className="md:hidden bg-gray-800 text-white py-2">
           <a href="#" className="block px-4 py-2 hover:bg-gray-700">Home</a>
-          <a href="/register" className="block px-4 py-2 hover:bg-gray-700">Shop</a>
+          <a href="#" className="block px-4 py-2 hover:bg-gray-700">Shop</a>
           <a href="#" className="block px-4 py-2 hover:bg-gray-700">About Us</a>
           <a href="#" className="block px-4 py-2 hover:bg-gray-700">Contact</a>
         </div>

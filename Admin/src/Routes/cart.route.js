@@ -9,7 +9,7 @@ const router = express.Router();
 // access: Private
 // Request: { product_id, quantity }
 // Response: { message: "Product added to cart", cart: { user_id, products: [{ product_id, quantity }] } }
-router.post("/addToCart/:user_id",cartMiddlewares, addToCartController);
+router.post("/addToCart", addToCartController);
 
 // get cart
 // path: cart/getCart

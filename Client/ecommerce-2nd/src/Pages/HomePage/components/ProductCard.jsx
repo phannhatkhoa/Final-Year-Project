@@ -1,5 +1,4 @@
 import React from 'react';
-import { FaCartPlus } from 'react-icons/fa';
 
 const ProductCard = ({ product }) => {
   // Function to truncate the product name
@@ -22,12 +21,6 @@ const ProductCard = ({ product }) => {
         <p className="text-gray-700">Price: ${product.price}</p>
         <p className="text-gray-700">Brand: {product.brand.name}</p>
         <p className = "text-gray-700">Sold: {product.quantity_sold}</p>
-      </div>
-      <div className="flex justify-center py-4">
-        <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline transition duration-300 ease-in-out transform hover:-translate-y-0.5 flex items-center">
-          <FaCartPlus className="inline mr-2" />
-          Add to Cart
-        </button>
       </div>
     </div>
   );

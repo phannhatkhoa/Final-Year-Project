@@ -48,7 +48,7 @@ export default function useRoutesElements() {
       element: <ProtectedRoutes />,
       children: [
         { path: 'user/profile', element: <ProfileTemplate><Profile /></ProfileTemplate> },
-        { path: 'cart/getCart', element: <CartTemplate><ShoppingCart /></CartTemplate> },
+        { path: `cart/getCart/:user_id`, element: <CartTemplate><ShoppingCart /></CartTemplate> },
         { path: 'payment', element: <PaymentTemplate><Payment /></PaymentTemplate> },
         
       ]

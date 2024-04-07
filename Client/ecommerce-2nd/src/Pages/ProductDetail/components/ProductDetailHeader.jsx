@@ -58,12 +58,12 @@ export default function ProductDetailHeader() {
           {isAuthenticated ? (
             <>
               <a href="/user/profile" className="text-white">Hello {userProfile.email}</a>
-              <a href="/cart" className="text-yellow-500 hover:text-yellow-600">
+              <a href="/cart/getCart:user_id" className="text-yellow-500 hover:text-yellow-600">
                 <FaShoppingCart className="text-2xl" />
               </a>
             </>
           ) : (
-            <a href="/cart">
+            <a href="/cart/getCart:user_id">
               <button className="bg-yellow-500 text-gray-800 px-4 py-2 rounded hover:bg-yellow-600 transition duration-300">
                 <FaShoppingCart className="mr-2" />
               </button>

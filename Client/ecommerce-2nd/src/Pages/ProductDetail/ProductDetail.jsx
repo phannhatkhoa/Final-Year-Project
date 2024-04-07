@@ -1,10 +1,12 @@
-import React, { useState }  from 'react';
+import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getProductByIdAPI } from '../../api/product.api';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { addToCartAPI } from '../../api/cart.api';
+import { getUserProfileFromLS } from '../../utils/localStorage';
 
 const ProductDetail = () => {
-    const navigate = useNavigate();
+    const user = getUserProfileFromLS();
     const { productId } = useParams();
     const { data: productData, isSuccess } = useQuery({
         queryKey: ['products', productId],
@@ -14,16 +16,20 @@ const ProductDetail = () => {
     const product = productData?.data?.data?.product;
     console.log(product);
 
-    const [cart, setCart] = useState([]);
-    const handleAddToCart = () => {
+    const handleAddToCart = async () => {
         if (isSuccess && product) {
-            navigate('/cart/getCart');
-            setCart(prevCart => [...prevCart, product]);
-            console.log(`Added to the cart: ${product.name}`);
-            
+            try {
+                const cart = await addToCartAPI({
+                    user_id: user.id,
+                    product_id: product._id,
+                    product_quantity: 1
+                });
+                console.log(cart);
+            } catch (error) {
+                console.error('Error adding to cart:', error);
+            }
         }
     };
-    console.log(handleAddToCart);
 
     const handleBuyNow = () => {
         if (isSuccess && product) {

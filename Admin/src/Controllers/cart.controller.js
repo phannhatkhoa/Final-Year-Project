@@ -1,17 +1,16 @@
 const cartServices = require("../Services/cart.services");
 
 const addToCartController = async (req, res) => {
-    try {
-        const { product_id, product_name, product_price, product_quantity, product_image, product_total_price } = req.body;
-        const { user_id } = req.params;
-        console.log(user_id);
-        const cart = await cartServices.addToCart(product_id, product_name, product_price, product_quantity, product_image, product_total_price, user_id);
-        if (cart) {
-            res.status(200).json({ message: 'Product added to cart', addToCart: cart });
+    try{
+        const cart = await cartServices.addToCart(req.body);
+        console.log(req.body);
+        if(cart){
+            res.status(200).json({ message: 'Product added to cart', cart });
         } else {
-            res.status(404).json({ message: 'Product not found' });
+            res.status(500).json({ message: 'Internal server error' });
         }
-    } catch (error) {
+    }
+    catch(error){
         console.error(error);
         res.status(500).json({ message: 'Internal server error' });
     }

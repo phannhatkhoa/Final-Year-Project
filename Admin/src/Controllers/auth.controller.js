@@ -1,8 +1,6 @@
 const databaseServices = require("../Services/database.connect");
 const userServices = require("../Services/user.services");
 
-
-
 const signupController = async (req, res, next) => {
     const insertedData = await userServices.userRegister(req.body);
     if (insertedData) {

@@ -1,46 +1,45 @@
 import { useQuery } from '@tanstack/react-query';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getCartAPI } from '../../api/cart.api';
+import { useParams } from 'react-router-dom';
 
 const ShoppingCart = () => {
+    const { user_id } = useParams();
     const {data: cartData} = useQuery({
         queryKey: ['cart'],
-        queryFn: () => getCartAPI(),
+        queryFn: () => getCartAPI(user_id),
         onSuccess: (data) => {
-            console.log(data); // Log the fetched data
-            console.log(data.cart); // Log the cart data specifically
+            console.log(data); 
+            console.log(data.cart);
         }
     });
     
     console.log(cartData);
 
 
-    const [cart, setCart] = useState(cartData ? cartData.cart : []);
-    useState(() => {
-        if (cartData) {
-            setCart(cartData.cart);
+    const [cart, setCart] = useState([]);
+
+    useEffect(() => {
+        if (cartData && cartData.cart && cartData.cart.products) {
+            setCart(cartData.cart.products);
         }
     }, [cartData]);
-    console.log(cart);
-
-
-    
-
-    const [selectedDeoliveryOption, setSelectedDeliveryOption] = useState('DPD');
-    const [shippingFee, setShippingFee] = useState(8);
 
     const handleQuantityChange = (id, value) => {
         setCart(prevCart =>
             prevCart.map(item =>
-                item.id === id ? { ...item, quantity: Math.max(1, item.quantity + value) } : item
+                item.product_id === id ? { ...item, product_quantity: Math.max(1, item.product_quantity + value) } : item
             )
         );
     };
 
+    const [selectedDeliveryOption, setSelectedDeliveryOption] = useState('DPD');
+    const [shippingFee, setShippingFee] = useState(8);
+
     const handleDeliveryOptionChange = (event) => {
-        const selectedDeoliveryOption = event.target.value;
-        setSelectedDeliveryOption(selectedDeoliveryOption);
-        switch (selectedDeoliveryOption) {
+        const selectedDeliveryOption = event.target.value;
+        setSelectedDeliveryOption(selectedDeliveryOption);
+        switch (selectedDeliveryOption) {
             case 'DPD':
                 setShippingFee(8);
                 break;
@@ -57,7 +56,7 @@ const ShoppingCart = () => {
     };
 
     // Calculate subtotal and totalAmount based on cart state
-    const subtotal = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    const subtotal = cart.reduce((acc, item) => acc + item.product_quantity * item.price, 0);
     const totalAmount = subtotal + shippingFee;
 
     return (
@@ -74,18 +73,18 @@ const ShoppingCart = () => {
                 {/* Left Column - Product List */}
                 <div className="col-span-3 md:col-span-2 space-y-4">
                     {cart.map(item => (
-                        <div key={item.id} className="border border-gray-200 rounded-md p-4 flex items-center justify-between">
+                        <div key={item.product_id} className="border border-gray-200 rounded-md p-4 flex items-center justify-between">
                             <div className="flex items-center space-x-4">
-                                <img src={`https://via.placeholder.com/50x50?text=${item.name}`} alt={item.name} className="w-16 h-16 rounded-md shadow-md" />
+                                <img src={`https://via.placeholder.com/50x50?text=${item.product_id}`} alt={item.product_id} className="w-16 h-16 rounded-md shadow-md" />
                                 <div>
-                                    <h3 className="font-semibold text-lg">{item.name}</h3>
+                                    <h3 className="font-semibold text-lg">{item.product_id}</h3>
                                     <p className="text-gray-500">${item.price}</p>
                                 </div>
                             </div>
                             <div className="flex items-center space-x-2">
-                                <button onClick={() => handleQuantityChange(item.id, -1)} className="bg-gray-200 text-gray-700 px-3 py-1 rounded-md">-</button>
-                                <span className="px-3 py-1 bg-gray-100 rounded-md">{item.quantity}</span>
-                                <button onClick={() => handleQuantityChange(item.id, 1)} className="bg-gray-200 text-gray-700 px-3 py-1 rounded-md">+</button>
+                                <button onClick={() => handleQuantityChange(item.product_id, -1)} className="bg-gray-200 text-gray-700 px-3 py-1 rounded-md">-</button>
+                                <span className="px-3 py-1 bg-gray-100 rounded-md">{item.product_quantity}</span>
+                                <button onClick={() => handleQuantityChange(item.product_id, 1)} className="bg-gray-200 text-gray-700 px-3 py-1 rounded-md">+</button>
                             </div>
                         </div>
                     ))}
