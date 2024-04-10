@@ -29,6 +29,7 @@ export default function Login() {
 
         saveUserProfileFromLS(data.data.user);
         console.log('User:', data.data.user);
+        window.alert('Login successfully!');
       },
       onError: (error) => {
         console.log('Error occurred:', error);

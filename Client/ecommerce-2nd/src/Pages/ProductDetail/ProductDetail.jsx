@@ -1,13 +1,15 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getProductByIdAPI } from '../../api/product.api';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { addToCartAPI } from '../../api/cart.api';
 import { getUserProfileFromLS } from '../../utils/localStorage';
 
 const ProductDetail = () => {
+    const navigate = useNavigate();
     const user = getUserProfileFromLS();
     const { productId } = useParams();
+    
     const { data: productData, isSuccess } = useQuery({
         queryKey: ['products', productId],
         queryFn: () => getProductByIdAPI(productId)
@@ -23,16 +25,32 @@ const ProductDetail = () => {
                     user_id: user.id,
                     product_id: product._id,
                     product_quantity: 1
+                    
                 });
                 console.log(cart);
+                window.alert('Product added to cart successfully!');
             } catch (error) {
                 console.error('Error adding to cart:', error);
+                window.alert('Failed to add product to cart. Please login first!');
             }
         }
     };
 
-    const handleBuyNow = () => {
+    const handleBuyNow = async () => {
         if (isSuccess && product) {
+            try {
+                const cart = await addToCartAPI({
+                    user_id: user.id,
+                    product_id: product._id,
+                    product_quantity: 1
+                });
+                console.log(cart);
+                navigate(`/cart/getCart/${user.id}`); 
+                window.alert('Product added to cart successfully! Please proceed to checkout.')
+            } catch (error) {
+                console.error('Error buying now:', error);
+                window.alert('Failed to buy product. Please login first!');
+            }
             console.log(`Buying now: ${product.name}`);
         }
     };
@@ -46,7 +64,6 @@ const ProductDetail = () => {
                             <div className="px-4 py-10 rounded-xl shadow-md relative">
                                 <img src={product.image} alt={product.name} className="w-4/5 rounded object-cover" />
                             </div>
-                            {/* Other product images can be displayed here */}
                         </div>
                         <div className="lg:col-span-2 flex flex-col justify-between">
                             <div className="bg-gray-100 rounded-lg p-6 shadow-md">

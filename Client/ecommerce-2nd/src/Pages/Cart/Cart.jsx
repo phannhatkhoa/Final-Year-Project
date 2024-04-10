@@ -2,43 +2,36 @@ import { useQuery } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
 import { getCartAPI } from '../../api/cart.api';
 import { useParams } from 'react-router-dom';
+import { getUserProfileFromLS } from '../../utils/localStorage';
 
 const ShoppingCart = () => {
+    const userProfile = getUserProfileFromLS();
+    console.log(userProfile);
     const { user_id } = useParams();
-    const {data: cartData} = useQuery({
+    const { data: cartData } = useQuery({
         queryKey: ['cart'],
         queryFn: () => getCartAPI(user_id),
-        onSuccess: (data) => {
-            console.log(data); 
-            console.log(data.cart);
-        }
     });
-    
     console.log(cartData);
 
-
     const [cart, setCart] = useState([]);
+    const [subtotal, setSubtotal] = useState(0);
+    const [shippingFee, setShippingFee] = useState(8);
 
     useEffect(() => {
         if (cartData && cartData.cart && cartData.cart.products) {
             setCart(cartData.cart.products);
+            updateSubtotal(cartData.cart.products);
         }
     }, [cartData]);
 
-    const handleQuantityChange = (id, value) => {
-        setCart(prevCart =>
-            prevCart.map(item =>
-                item.product_id === id ? { ...item, product_quantity: Math.max(1, item.product_quantity + value) } : item
-            )
-        );
+    const updateSubtotal = (cartProducts) => {
+        const subTotalAmount = cartProducts.reduce((acc, item) => acc + (item.product_quantity * item.product_detail.price), 0);
+        setSubtotal(subTotalAmount);
     };
-
-    const [selectedDeliveryOption, setSelectedDeliveryOption] = useState('DPD');
-    const [shippingFee, setShippingFee] = useState(8);
 
     const handleDeliveryOptionChange = (event) => {
         const selectedDeliveryOption = event.target.value;
-        setSelectedDeliveryOption(selectedDeliveryOption);
         switch (selectedDeliveryOption) {
             case 'DPD':
                 setShippingFee(8);
@@ -55,19 +48,12 @@ const ShoppingCart = () => {
         }
     };
 
-    // Calculate subtotal and totalAmount based on cart state
-    const subtotal = cart.reduce((acc, item) => acc + item.product_quantity * item.price, 0);
+    // Calculate total amount
     const totalAmount = subtotal + shippingFee;
 
     return (
         <div className="container mx-auto py-8">
-            {/* Order Details */}
-            <div className="flex justify-start items-start space-y-6 flex-col md:flex-row md:space-y-0 md:space-x-8">
-                <div className="space-y-2">
-                    <h1 className="text-3xl lg:text-4xl font-semibold leading-7 lg:leading-9 text-gray-800">Order #13432</h1>
-                    <p className="text-base font-medium leading-6 text-gray-600">21st March 2021 at 10:34 PM</p>
-                </div>
-            </div>
+            <h1 className="text-2xl font-semibold mb-4">Shopping Cart of {userProfile.full_name}</h1>
             {/* Product List and Summary */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
                 {/* Left Column - Product List */}
@@ -75,16 +61,14 @@ const ShoppingCart = () => {
                     {cart.map(item => (
                         <div key={item.product_id} className="border border-gray-200 rounded-md p-4 flex items-center justify-between">
                             <div className="flex items-center space-x-4">
-                                <img src={`https://via.placeholder.com/50x50?text=${item.product_id}`} alt={item.product_id} className="w-16 h-16 rounded-md shadow-md" />
+                                <img src={item.product_detail.image} alt={item.product_detail.name} className="w-16 h-16 rounded-md shadow-md" />
                                 <div>
-                                    <h3 className="font-semibold text-lg">{item.product_id}</h3>
-                                    <p className="text-gray-500">${item.price}</p>
+                                    <h3 className="font-semibold text-lg">{item.product_detail.name}</h3>
+                                    <p className="text-gray-500">${item.product_detail.price}</p>
                                 </div>
                             </div>
-                            <div className="flex items-center space-x-2">
-                                <button onClick={() => handleQuantityChange(item.product_id, -1)} className="bg-gray-200 text-gray-700 px-3 py-1 rounded-md">-</button>
+                            <div>
                                 <span className="px-3 py-1 bg-gray-100 rounded-md">{item.product_quantity}</span>
-                                <button onClick={() => handleQuantityChange(item.product_id, 1)} className="bg-gray-200 text-gray-700 px-3 py-1 rounded-md">+</button>
                             </div>
                         </div>
                     ))}

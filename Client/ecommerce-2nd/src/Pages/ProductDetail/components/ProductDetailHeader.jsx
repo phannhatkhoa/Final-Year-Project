@@ -1,11 +1,17 @@
 import React, { useContext } from 'react';
 import { FaShoppingCart } from 'react-icons/fa';
-import { getUserProfileFromLS } from '../../../utils/localStorage';
+import { deleteUserProfileFromLS, getUserProfileFromLS } from '../../../utils/localStorage';
 import { AuthContext } from '../../../contexts/AuthProvider';
+import { Link } from 'react-router-dom';
 
 export default function ProductDetailHeader() {
-  const { isAuthenticated } = useContext(AuthContext);
+  const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
   const userProfile = getUserProfileFromLS();
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    deleteUserProfileFromLS();
+  };
 
   return (
     <header className="bg-gradient-to-r from-yellow-400 to-red-500 text-white py-4">
@@ -20,54 +26,53 @@ export default function ProductDetailHeader() {
         <nav className="flex space-x-4">
           <ul className="flex space-x-4">
             <li>
-              <a href="/home" className="text-white hover:text-yellow-200 transition duration-300">
+              <Link to="/home" className="text-white hover:text-yellow-200 transition duration-300">
                 Home  
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/product/phone" className="text-white hover:text-yellow-200 transition duration-300">
+              <Link to="/product/phone" className="text-white hover:text-yellow-200 transition duration-300">
                 Phone
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/tablets" className="text-white hover:text-yellow-200 transition duration-300">
+              <Link to="/tablets" className="text-white hover:text-yellow-200 transition duration-300">
                 Tablet
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/laptops" className="text-white hover:text-yellow-200 transition duration-300">
+              <Link to="/laptops" className="text-white hover:text-yellow-200 transition duration-300">
                 Laptop
-              </a>
+              </Link>
             </li>
           </ul>
         </nav>
-
-        {/* Search bar */}
-        <div className="ml-4 relative">
-          <input
-            type="text"
-            placeholder="Search for products..."
-            //value={searchQuery}
-            //onChange={handleSearchChange}
-            className="w-full p-2 border border-gray-400 border-opacity-50 rounded focus:outline-none focus:border-purple-500 text-black bg-gray-200 placeholder-gray-500 text-sm"
-          />
-        </div>
 
         {/* User actions */}
         <div className="flex items-center space-x-4">
           {isAuthenticated ? (
             <>
-              <a href="/user/profile" className="text-white">Hello {userProfile.email}</a>
-              <a href="/cart/getCart:user_id" className="text-yellow-500 hover:text-yellow-600">
-                <FaShoppingCart className="text-2xl" />
-              </a>
+              <a href="/user/profile" className="text-white">Hello {userProfile?.email}</a>
+              {userProfile && (
+                <Link to={`/cart/getCart/${userProfile.id}`} className="text-yellow-500 hover:text-yellow-600"> 
+                  <FaShoppingCart className="text-2xl" />
+                </Link>
+              )}
+              <button onClick={handleLogout} className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition duration-300">
+                Logout
+              </button>
             </>
           ) : (
-            <a href="/cart/getCart:user_id">
-              <button className="bg-yellow-500 text-gray-800 px-4 py-2 rounded hover:bg-yellow-600 transition duration-300">
-                <FaShoppingCart className="mr-2" />
-              </button>
-            </a>
+            <>
+              {userProfile && (
+                <Link to={`/cart/getCart/${userProfile.id}`} className="text-yellow-500 hover:text-yellow-600">
+                  <FaShoppingCart className="mr-2 text-2xl" />
+                </Link>
+              )}
+              <Link to="/user/signin" className="text-white hover:text-yellow-200 transition duration-300"> 
+                Login
+              </Link>
+            </>
           )}
         </div>
       </div>

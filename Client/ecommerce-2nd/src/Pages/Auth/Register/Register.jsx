@@ -14,6 +14,7 @@ export const Register = () => {
     {
       onSuccess: (data) => {
         console.log('DataRes:', data);
+        window.alert('User registered successfully!');
         navigate('/user/signin');
       },
       onError: (error) => {
