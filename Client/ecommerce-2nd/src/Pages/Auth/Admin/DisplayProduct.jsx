@@ -32,7 +32,7 @@ export const DisplayProduct = () => {
                     </tr>
                 </thead>
                 <tbody className="text-gray-600 text-sm font-light">
-                    {data && data.products.map((product, index) => (
+                    {data && data.products && data.products.map((product, index) => (
                         <tr
                             key={`${product.id}-${index}`}
                             className="border-b border-gray-200 hover:bg-gray-100"

@@ -20,15 +20,16 @@ export const Home = () => {
     queryFn: () => getCategoryAPI()
   });
 
-  let categories = null;
-  if (categoryData) {
-    categories = categoryData.data.data.categories;
-  }
-
   let products = null;
-  if (productData) {
+  if (productData && productData.data) {
     products = productData.data.data.products;
   }
+  console.log(products);
+  let categories = null;
+  if (categoryData && categoryData.data) {
+    categories = categoryData.data.data.categories;
+  }
+  
 
   // Sorting products
   if (products) {
@@ -53,7 +54,7 @@ export const Home = () => {
 
   return (
     <div>
-      <div className="mb-8">
+      <div className="mt4 mb-8">
         <Banner />
       </div>
 

@@ -1,18 +1,16 @@
-import { useQuery } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
-import { getCartAPI } from '../../api/cart.api';
+import { getCartAPI, deleteProductInCartAPI, updateCartAPI } from '../../api/cart.api';
 import { useParams } from 'react-router-dom';
 import { getUserProfileFromLS } from '../../utils/localStorage';
+import { useQuery } from '@tanstack/react-query';
 
 const ShoppingCart = () => {
     const userProfile = getUserProfileFromLS();
-    console.log(userProfile);
     const { user_id } = useParams();
-    const { data: cartData } = useQuery({
+    const { data: cartData, refetch } = useQuery({
         queryKey: ['cart'],
         queryFn: () => getCartAPI(user_id),
     });
-    console.log(cartData);
 
     const [cart, setCart] = useState([]);
     const [subtotal, setSubtotal] = useState(0);
@@ -24,6 +22,7 @@ const ShoppingCart = () => {
             updateSubtotal(cartData.cart.products);
         }
     }, [cartData]);
+    console.log('Cart:', cart);
 
     const updateSubtotal = (cartProducts) => {
         const subTotalAmount = cartProducts.reduce((acc, item) => acc + (item.product_quantity * item.product_detail.price), 0);
@@ -48,15 +47,43 @@ const ShoppingCart = () => {
         }
     };
 
-    // Calculate total amount
     const totalAmount = subtotal + shippingFee;
 
+    const deleteProduct = async (product_id) => {
+        try {
+            await deleteProductInCartAPI({
+                user_id: userProfile.id,
+                product_id: product_id
+            });
+            window.alert('Product deleted successfully!');
+            await refetch();
+        } catch (error) {
+            window.alert('Failed to delete product. Please try again!');
+            console.error('Error deleting product:', error);
+        }
+    }
+
+    const updateCart = async (product_id, quantity) => {
+        try {
+            await updateCartAPI({
+                user_id: userProfile.id,
+                product_id: product_id,
+                product_quantity: quantity
+            });
+            await refetch();
+        } catch (error) {
+            console.error('Error updating cart:', error);
+        }
+    }
+
+    const handleQuantityChange = async (product_id, quantity) => {
+        await updateCart(product_id, quantity);
+    }
+
     return (
-        <div className="container mx-auto py-8">
-            <h1 className="text-2xl font-semibold mb-4">Shopping Cart of {userProfile.full_name}</h1>
-            {/* Product List and Summary */}
+        <div className="container mx-auto px-4 md:px-8 py-8">
+            <h1 className="text-2xl font-semibold mb-4 text-center">Shopping Cart of {userProfile.full_name}</h1>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
-                {/* Left Column - Product List */}
                 <div className="col-span-3 md:col-span-2 space-y-4">
                     {cart.map(item => (
                         <div key={item.product_id} className="border border-gray-200 rounded-md p-4 flex items-center justify-between">
@@ -68,17 +95,21 @@ const ShoppingCart = () => {
                                 </div>
                             </div>
                             <div>
+                                <button onClick={() => handleQuantityChange(item.product_id, item.product_quantity - 1)} className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold px-2 py-1 rounded-l">
+                                    -
+                                </button>
                                 <span className="px-3 py-1 bg-gray-100 rounded-md">{item.product_quantity}</span>
+                                <button onClick={() => handleQuantityChange(item.product_id, item.product_quantity + 1)} className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold px-2 py-1 rounded-r">
+                                    +
+                                </button>
+                                <button onClick={() => deleteProduct(item.product_id)} className="ml-4 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md">Delete</button>
                             </div>
                         </div>
                     ))}
                 </div>
-                {/* Right Column */}
                 <div className="col-span-3 md:col-span-1 space-y-4">
-                    {/* Shipping */}
                     <div className="border rounded-md p-4 bg-gray-100">
                         <h2 className="text-lg font-semibold mb-4">Shipping</h2>
-                        {/* Dropdown for selecting delivery option */}
                         <div className="mb-4">
                             <label htmlFor="deliveryOption" className="block text-sm font-medium text-gray-700">Select Delivery Option:</label>
                             <select id="deliveryOption" name="deliveryOption" className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:ring focus:ring-gray-500 focus:border-gray-500" onChange={handleDeliveryOptionChange}>
@@ -88,7 +119,6 @@ const ShoppingCart = () => {
                             </select>
                         </div>
                     </div>
-                    {/* Summary */}
                     <div className="border rounded-md p-4 bg-gray-100 mb-4">
                         <h2 className="text-lg font-semibold mb-4">Order Summary</h2>
                         <div className="flex justify-between mb-2">
@@ -105,7 +135,6 @@ const ShoppingCart = () => {
                             <span className="font-semibold text-lg">${totalAmount}</span>
                         </div>
                     </div>
-                    {/* Payment Button */}
                     <button className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-md w-full mb-4">
                         Proceed to Checkout
                     </button>

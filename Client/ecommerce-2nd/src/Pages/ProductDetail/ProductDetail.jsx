@@ -30,8 +30,9 @@ const ProductDetail = () => {
                 console.log(cart);
                 window.alert('Product added to cart successfully!');
             } catch (error) {
-                console.error('Error adding to cart:', error);
                 window.alert('Failed to add product to cart. Please login first!');
+                navigate('/user/signin')
+                console.error('Error adding to cart:', error);
             }
         }
     };

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { ProfileAPI, UpdateProfileAPI } from '../../../api/auth.api';
-import { getUserProfileFromLS } from '../../../utils/localStorage';
+import { getUserProfileFromLS, saveUserProfileFromLS } from '../../../utils/localStorage';
 
 const ProfilePage = () => {
   const userProfile = getUserProfileFromLS();
@@ -38,6 +38,10 @@ const ProfilePage = () => {
       await UpdateProfileAPI(userProfile.id, formData);
       await refetch();
       setEditing(false);
+      saveUserProfileFromLS({
+        ...userProfile,
+        ...formData
+      })
     } catch (error) {
       console.error('Error updating profile:', error);
     } finally {

@@ -6,10 +6,10 @@ class CartServices {
     async addToCart(body) {
         try {
             const { user_id, product_id, product_quantity } = body;
-    
+
             const userIdObject = new ObjectId(user_id);
             const productIdObject = new ObjectId(product_id);
-    
+
             const cart = await databaseServices.cartCollection.findOne({ user_id: userIdObject });
             if (cart) {
                 const productExist = cart.products.find(product => product.product_id.equals(productIdObject));
@@ -65,6 +65,28 @@ class CartServices {
         }
     }
 
+    async deleteProductInCart(body) {
+        try {
+            const { user_id, product_id } = body;
+            const userIdObject = new ObjectId(user_id);
+            const productIdObject = new ObjectId(product_id);
+            const cart = await databaseServices.cartCollection.findOne({ user_id: userIdObject });
+            if (cart) {
+                const productIndex = cart.products.findIndex(product => product.product_id.equals(productIdObject));
+                if (productIndex !== -1) {
+                    cart.products.splice(productIndex, 1);
+                    await databaseServices.cartCollection.updateOne({ user_id: userIdObject }, { $set: cart });
+                    return cart;
+                }
+            }
+            return null;
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    }
+
+
     async deleteCart(id) {
         try {
             await databaseServices.cartCollection.deleteOne({ _id: new ObjectId(id) });
@@ -75,15 +97,21 @@ class CartServices {
         }
     }
 
-    async updateCart(id, updatedCart) {
-        try {
-            await databaseServices.cartCollection.updateOne(
-                { _id: new ObjectId(id) },
-                { $set: updatedCart });
-            return updatedCart;
-        } catch (error) {
-            console.error(error);
-            return null;
+    async updateCart(body) {
+        const { user_id, product_id, product_quantity } = body;
+
+        const userIdObject = new ObjectId(user_id);
+        const productIdObject = new ObjectId(product_id);
+
+        const cart = await databaseServices.cartCollection.findOne({ user_id: userIdObject });
+        //if cart update quantity increase
+        if (cart) {
+            const productExist = cart.products.find(product => product.product_id.equals(productIdObject));
+            if (productExist) {
+                productExist.product_quantity = product_quantity;
+                await databaseServices.cartCollection.updateOne({ user_id: userIdObject }, { $set: cart });
+                return cart;
+            }
         }
     }
 }
