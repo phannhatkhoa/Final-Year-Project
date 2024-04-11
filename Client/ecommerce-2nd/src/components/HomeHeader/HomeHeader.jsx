@@ -3,9 +3,10 @@ import { FaShoppingCart } from 'react-icons/fa';
 import { AuthContext } from '../../contexts/AuthProvider';
 import { useContext } from 'react';
 import { deleteUserProfileFromLS, getUserProfileFromLS } from '../../utils/localStorage';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Header = () => {
+  const location = useLocation();
   const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
   const handleLogout = () => {
     setIsAuthenticated(false);
@@ -22,30 +23,49 @@ const Header = () => {
 
         {/* Navigation menu */}
         <nav className="flex space-x-4">
-          <ul className="flex space-x-4">
-            <li>
-              <a href="/home" className="text-white hover:text-yellow-200 transition duration-300">
-                Home
-              </a>
-            </li>
-            <li>
-              <a href="/phones" className="text-white hover:text-yellow-200 transition duration-300">
-                Phone
-              </a>
-            </li>
-            <li>
-              <a href="/tablets" className="text-white hover:text-yellow-200 transition duration-300">
-                Tablet
-              </a>
-            </li>
-            <li>
-              <a href="/laptops" className="text-white hover:text-yellow-200 transition duration-300">
-                Laptop
-              </a>
-            </li>
-          </ul>
-        </nav>
-
+      <ul className="flex space-x-4">
+        <li>
+          <Link
+            to="/home"
+            className={`text-white transition duration-300 ${location.pathname === '/home' ? 'text-yellow-200' : 'hover:text-yellow-200'}`}
+          >
+            Home
+          </Link>
+        </li>
+        <li>
+          <Link
+            to="/phone"
+            className={`text-white transition duration-300 ${location.pathname === '/phone' ? 'text-yellow-200' : 'hover:text-yellow-200'}`}
+          >
+            Phone
+          </Link>
+        </li>
+        <li>
+          <Link
+            to="/tablet"
+            className={`text-white transition duration-300 ${location.pathname === '/tablet' ? 'text-yellow-200' : 'hover:text-yellow-200'}`}
+          >
+            Tablet
+          </Link>
+        </li>
+        <li>
+          <Link
+            to="/laptop"
+            className={`text-white transition duration-300 ${location.pathname === '/laptop' ? 'text-yellow-200' : 'hover:text-yellow-200'}`}
+          >
+            Laptop
+          </Link>
+        </li>
+        <li>
+          <Link
+            to="/aboutUs"
+            className={`text-white transition duration-300 ${location.pathname === '/aboutUs' ? 'text-yellow-200' : 'hover:text-yellow-200'}`}
+          >
+            About Us
+          </Link>
+        </li>
+      </ul>
+    </nav>
 
         {/* User actions */}
         <div className="flex items-center space-x-4">

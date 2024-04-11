@@ -27,18 +27,23 @@ export default function ProductDetailHeader() {
               </Link>
             </li>
             <li>
-              <Link to="/product/phone" className="text-white hover:text-yellow-200 transition duration-300">
+              <Link to="/phone" className="text-white hover:text-yellow-200 transition duration-300">
                 Phone
               </Link>
             </li>
             <li>
-              <Link to="/tablets" className="text-white hover:text-yellow-200 transition duration-300">
+              <Link to="/tablet" className="text-white hover:text-yellow-200 transition duration-300">
                 Tablet
               </Link>
             </li>
             <li>
-              <Link to="/laptops" className="text-white hover:text-yellow-200 transition duration-300">
+              <Link to="/laptop" className="text-white hover:text-yellow-200 transition duration-300">
                 Laptop
+              </Link>
+            </li>
+            <li>
+              <Link to="/aboutUs" className="text-white hover:text-yellow-200 transition duration-300">
+                About Us
               </Link>
             </li>
           </ul>

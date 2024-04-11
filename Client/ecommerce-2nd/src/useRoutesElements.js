@@ -18,6 +18,13 @@ import WelcomePage from './Pages/Welcome/Welcome';
 import { UserPage } from './Pages/Auth/Admin/DisplayUser';
 import { AdminTemplate } from './templates/AdminTemplate';
 import { DisplayProduct } from './Pages/Auth/Admin/DisplayProduct';
+import AboutUs from './Pages/Welcome/AboutUs';
+import { Phone } from './Pages/HomePage/Phone';
+import { Tablet } from './Pages/HomePage/Tablet';
+import { Laptop } from './Pages/HomePage/Laptop';
+import { PhoneTemplate } from './templates/PhoneTemplate';
+import { TabletTemplate } from './templates/TabletTemplate';
+import { LaptopTemplate } from './templates/LaptopTemplate';
 
 const ProtectedRoutes = () => {
   const { isAuthenticated } = useContext(AuthContext);
@@ -40,7 +47,11 @@ export default function useRoutesElements() {
         { path: 'user/signin', element: <RegisterTemplate><Login /></RegisterTemplate> },
         { path: 'user/signup', element: <RegisterTemplate><Register /></RegisterTemplate> },
         { path: 'home', element: <HomeTemplate><Home /></HomeTemplate> },
-        { path: `/product/getProduct/:productId`, element: <ProductDetailTemplate><ProductDetail /></ProductDetailTemplate> },
+        { path: `/product/getProduct/:productId`, element: <ProductDetailTemplate> <ProductDetail /> </ProductDetailTemplate> },
+        { path: 'aboutUs', element: <HomeTemplate><AboutUs /></HomeTemplate> },
+        { path: 'phone', element: <PhoneTemplate><Phone /></PhoneTemplate> },
+        { path: 'tablet', element: <TabletTemplate><Tablet /></TabletTemplate> },
+        { path: 'laptop', element: <LaptopTemplate><Laptop /></LaptopTemplate> }
       ]
     },
     {
@@ -50,7 +61,7 @@ export default function useRoutesElements() {
         { path: 'user/profile', element: <ProfileTemplate><Profile /></ProfileTemplate> },
         { path: `cart/getCart/:user_id`, element: <CartTemplate><ShoppingCart /></CartTemplate> },
         { path: 'payment', element: <PaymentTemplate><Payment /></PaymentTemplate> },
-        
+
       ]
     },
     {
@@ -58,7 +69,7 @@ export default function useRoutesElements() {
       element: <RejectedRoutes />,
       children: [
         { path: 'admin/getUser', element: <AdminTemplate><UserPage /></AdminTemplate> },
-        { path: 'admin/getProducts', element: <AdminTemplate><DisplayProduct /></AdminTemplate>}
+        { path: 'admin/getProducts', element: <AdminTemplate><DisplayProduct /></AdminTemplate> }
       ]
     }
   ]);
