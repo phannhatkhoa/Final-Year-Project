@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { ProfileAPI, UpdateProfileAPI } from '../../../api/auth.api';
 import { getUserProfileFromLS, saveUserProfileFromLS } from '../../../utils/localStorage';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { storage } from '../../../utils/config';
 
 const ProfilePage = () => {
   const userProfile = getUserProfileFromLS();
@@ -16,7 +18,8 @@ const ProfilePage = () => {
     email: '',
     full_name: '',
     date_of_birth: '',
-    location: ''
+    location: '',
+    image: ''
   });
 
   const userData = data && data.data.body;
@@ -41,7 +44,7 @@ const ProfilePage = () => {
       saveUserProfileFromLS({
         ...userProfile,
         ...formData
-      })
+      });
     } catch (error) {
       console.error('Error updating profile:', error);
     } finally {
@@ -57,11 +60,48 @@ const ProfilePage = () => {
     }));
   };
 
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
+
+  const onImageChange = (event) => {
+    const image = event.target.files[0];
+    setSelectedImage(image);
+
+    const storageRef = ref(storage, `images/${image.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, image);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+        setUploadProgress(progress);
+      },
+      (error) => {
+        console.error("Error uploading image:", error);
+      },
+      async () => {
+        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+        console.log("File available at", downloadURL);
+        setFormData((prevData) => ({
+          ...prevData,
+          profile_image: downloadURL // Assuming 'profile_image' is the field in the form data to store the image URL
+        }));
+      }
+    );
+  };
+
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-md shadow-md">
       <h1 className="text-2xl font-semibold mb-4 ">User Profile</h1>
       {editing ? (
         <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label htmlFor="profile_image" className="block text-gray-700 font-semibold mb-2">Profile Image:</label>
+            <input type="file" accept="image/*" onChange={onImageChange} />
+            {selectedImage && <p>Image selected: {selectedImage.name}</p>}
+            {uploadProgress > 0 && <p>Upload Progress: {uploadProgress}%</p>}
+          </div>
           <div className="mb-4">
             <label htmlFor="email" className="block text-gray-700 font-semibold mb-2">Email:</label>
             <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className="text-gray-800 bg-gray-100 rounded-md px-4 py-2 w-full" />
@@ -89,6 +129,9 @@ const ProfilePage = () => {
         </form>
       ) : (
         <div>
+          <div className="mb-4">
+            <img src={userData && userData.profile_image} alt="Profile" className="w-24 h-24 rounded-full mx-auto" />
+          </div>
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2">Email:</label>
             <p className="text-gray-800">{userData && userData.email}</p>
