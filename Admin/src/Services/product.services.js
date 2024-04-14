@@ -129,6 +129,49 @@ class ProductServices {
             return null;
         }
     }
+
+    async commentProduct(id, comment) {
+        try {
+            const product = await databaseServices.productCollection.findOne({ _id: new ObjectId(id) });
+            if (!product) {
+                throw new Error('Product not found');
+            }
+            
+            // Check if product.comment exists and is an array
+            if (!product.comment || !Array.isArray(product.comment)) {
+                product.comment = []; // Initialize as an array if not
+            }
+    
+            // Add current date and time to the comment
+            const timestamp = new Date();
+            const commentWithTimestamp = { comment, timestamp };
+    
+            product.comment.push(commentWithTimestamp); // Add the new comment with timestamp
+            await databaseServices.productCollection.updateOne(
+                { _id: new ObjectId(id) },
+                { $set: { comment: product.comment } }
+            );
+            return true;
+        } catch (error) {
+            console.error('Error during commenting product:', error.message);
+            return null;
+        }
+    }
+    
+    
+
+    async getCommentProduct(id) {
+        try {
+            const product = await databaseServices.productCollection.findOne({ _id: new ObjectId(id) });
+            if (!product) {
+                throw new Error('Product not found');
+            }
+            return product.comment;
+        } catch (error) {
+            console.error('Error during fetching comment:', error.message);
+            return null;
+        }
+    }
 }
 
 const productServices = new ProductServices();

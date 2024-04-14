@@ -56,6 +56,36 @@ const deleteProductController = async (req, res) => {
     }
 }
 
+// const commentProductController = async (req, res) => {
+//     const { id } = req.params;
+//     const { comment } = req.body;
+//     const resultComment = await productServices.commentProduct(id, comment);
+//     if (resultComment) {
+//         res.status(200).json({ message: 'Comment added successfully', comment });
+//     } else {
+//         res.status(500).json({ message: 'Internal server error' });
+//     }
+// }
+
+const addCommentController = async (req, res) => {
+    const { id } = req.params;
+    const { comment } = req.body;
+    const resultComment = await productServices.commentProduct(id, comment);
+    if (resultComment) {
+        res.status(200).json({ message: 'Comment added successfully', comment });
+    } else {
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+const getCommentController = async (req, res) => {
+    const { id } = req.params;
+    const comments = await productServices.getCommentProduct(id);
+    if (comments) {
+        res.status(200).json({ data: { comments } });
+    } else {
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
 
 
 module.exports = {
@@ -63,6 +93,8 @@ module.exports = {
     getProductController,
     getProductByIdController,
     updateProductController,
-    deleteProductController
+    deleteProductController,
+    addCommentController,
+    getCommentController
 };
 

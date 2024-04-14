@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { getProductByIdAPI } from '../../api/product.api';
+import { commentProductAPI, getProductByIdAPI } from '../../api/product.api';
 import { useNavigate, useParams } from 'react-router-dom';
 import { addToCartAPI } from '../../api/cart.api';
 import { getUserProfileFromLS } from '../../utils/localStorage';
@@ -9,7 +9,8 @@ const ProductDetail = () => {
     const navigate = useNavigate();
     const user = getUserProfileFromLS();
     const { productId } = useParams();
-    
+    const [comment, setComment] = useState('');
+
     const { data: productData, isSuccess } = useQuery({
         queryKey: ['products', productId],
         queryFn: () => getProductByIdAPI(productId)
@@ -25,7 +26,7 @@ const ProductDetail = () => {
                     user_id: user.id,
                     product_id: product._id,
                     product_quantity: 1
-                    
+
                 });
                 console.log(cart);
                 window.alert('Product added to cart successfully!');
@@ -46,13 +47,25 @@ const ProductDetail = () => {
                     product_quantity: 1
                 });
                 console.log(cart);
-                navigate(`/cart/getCart/${user.id}`); 
+                navigate(`/cart/getCart/${user.id}`);
                 window.alert('Product added to cart successfully! Please proceed to checkout.')
             } catch (error) {
                 console.error('Error buying now:', error);
                 window.alert('Failed to buy product. Please login first!');
             }
             console.log(`Buying now: ${product.name}`);
+        }
+    };
+
+    const handleCommentSubmit = async () => {
+        try {
+            const response = await commentProductAPI(product._id, { comment });
+            console.log('Comment response:', response);
+            window.alert('Comment added successfully!');
+            setComment('');
+        } catch (error) {
+            console.error('Error commenting:', error);
+            window.alert('Failed to comment. Please login first!');
         }
     };
 
@@ -81,6 +94,38 @@ const ProductDetail = () => {
                             <div className="mt-10">
                                 <button onClick={handleBuyNow} type="button" className="w-full px-4 py-3 bg-gray-800 hover:bg-gray-700 text-white text-sm font-bold rounded-lg transition-colors duration-300 mb-2">Buy now</button>
                                 <button onClick={handleAddToCart} type="button" className="w-full px-4 py-2.5 border border-gray-800 bg-transparent hover:bg-gray-50 text-gray-800 text-sm font-bold rounded-lg transition-colors duration-300">Add to cart</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {isSuccess && product && (
+                <div className="p-6 lg:max-w-7xl max-w-4xl mx-auto">
+                    <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
+                        <div className="lg:col-span-5">
+                            <div className="bg-gray-100 rounded-lg shadow-md p-6">
+                                {/* Display previous comments */}
+                                {product.comment && product.comment.length > 0 && (
+                                    <div className="border-t border-gray-300 pt-4 mt-4">
+                                        <h4 className="text-xl font-semibold mb-4">Previous Comments</h4>
+                                        {product.comment.map((commentItem, index) => (
+                                            <div key={index} className="bg-white rounded-lg p-3 mb-2 shadow-md">
+                                                <p className="text-gray-800">{commentItem.comment}</p>
+                                                <p className="text-gray-500 text-sm mt-2">Posted on: {new Date(commentItem.timestamp).toLocaleString()}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                                <h3 className="text-2xl font-bold text-gray-900 mt-8 mb-4">Add Your Comment</h3>
+                                {/* Add a comment input field */}
+                                <textarea
+                                    value={comment}
+                                    onChange={(e) => setComment(e.target.value)}
+                                    placeholder="Write your comment here..."
+                                    className="border border-gray-300 rounded-lg p-3 mb-4 w-full resize-none focus:outline-none focus:border-blue-500"
+                                />
+                                {/* Add comment submit button */}
+                                <button onClick={handleCommentSubmit} type="button" className="w-full px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white text-sm font-bold rounded-lg transition duration-300 ease-in-out">Add Comment</button>
                             </div>
                         </div>
                     </div>

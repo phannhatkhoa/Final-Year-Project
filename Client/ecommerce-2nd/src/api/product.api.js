@@ -19,3 +19,20 @@ export const getProductByIdAPI = async (id) => {
 };
 
 
+export const commentProductAPI = async (id, body) => {
+  try {
+    const response = await httpConnection.post(`/product/comment/${id}`, body);
+    return response;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+export const getCommentProductAPI = async (id) => {
+  try {
+    const response = await httpConnection.get(`/product/getComments/${id}`);
+    return response;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}

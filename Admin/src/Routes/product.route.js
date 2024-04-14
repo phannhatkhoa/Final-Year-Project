@@ -1,5 +1,5 @@
 const express = require("express");
-const { createProductController, updateProductController, deleteProductController, getProductController, getProductByIdController } = require("../Controllers/product.controller");
+const { createProductController, updateProductController, deleteProductController, getProductController, getProductByIdController, commentProductController, getCommentController, addCommentController } = require("../Controllers/product.controller");
 const { productUpdateMiddleware, productCreateMiddleware } = require("../Middlewares/product.middlewares");
 
 const router = express.Router();
@@ -43,5 +43,21 @@ router.put("/update/:id", productUpdateMiddleware, updateProductController);
 //Request: { id }
 //Response: { message: "Product deleted successfully" }
 router.delete("/delete/:id", deleteProductController);
+
+// Comment on product
+//path: product/comment
+//method: POST
+//access: Private
+//Request: { id, comment }
+//Response: { message: "Comment added successfully", comment }
+router.post("/comment/:id", addCommentController);
+
+// get comments
+//path: product/getComments
+//method: GET
+//access: Public
+//Request: { id }
+//Response: { comments: [{ comment }] }
+router.get("/getComments/:id", getCommentController);
 
 module.exports = router;
