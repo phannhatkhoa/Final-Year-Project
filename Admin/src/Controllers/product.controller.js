@@ -13,7 +13,7 @@ const createProductController = async (req, res) => {
 const getProductController = async (req, res) => {
     try {
         const products = await productServices.getAllProducts();
-        
+
         if (products) {
             return res.status(200).json({ data: { products } });
         } else {
@@ -68,12 +68,17 @@ const deleteProductController = async (req, res) => {
 // }
 
 const addCommentController = async (req, res) => {
-    const { id } = req.params;
-    const { comment } = req.body;
-    const resultComment = await productServices.commentProduct(id, comment);
-    if (resultComment) {
-        res.status(200).json({ message: 'Comment added successfully', comment });
-    } else {
+    try{
+        const comment = await productServices.commentProduct(req.body);
+        console.log(comment);
+        if (comment) {
+            res.status(200).json({ message: 'Comment added successfully', comment });
+        } else {
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    }
+    catch (error) {
+        console.error(error);
         res.status(500).json({ message: 'Internal server error' });
     }
 }

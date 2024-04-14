@@ -50,7 +50,7 @@ router.delete("/delete/:id", deleteProductController);
 //access: Private
 //Request: { id, comment }
 //Response: { message: "Comment added successfully", comment }
-router.post("/comment/:id", addCommentController);
+router.post("/comment", addCommentController);
 
 // get comments
 //path: product/getComments

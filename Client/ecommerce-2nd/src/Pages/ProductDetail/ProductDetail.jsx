@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React,  {useState}  from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { commentProductAPI, getProductByIdAPI } from '../../api/product.api';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -11,7 +11,7 @@ const ProductDetail = () => {
     const { productId } = useParams();
     const [comment, setComment] = useState('');
 
-    const { data: productData, isSuccess } = useQuery({
+    const { data: productData, isSuccess, refetch } = useQuery({
         queryKey: ['products', productId],
         queryFn: () => getProductByIdAPI(productId)
     });
@@ -59,15 +59,28 @@ const ProductDetail = () => {
 
     const handleCommentSubmit = async () => {
         try {
-            const response = await commentProductAPI(product._id, { comment });
-            console.log('Comment response:', response);
+            if (!user) {
+                window.alert('Please login first to comment.');
+                navigate('/user/signin');
+                return;
+            }
+
+            await commentProductAPI({
+                user_id: user.id,
+                product_id: productId,
+                comment: comment
+            });
+
             window.alert('Comment added successfully!');
             setComment('');
+            // Refetch product data to update comments
+            refetch();
         } catch (error) {
             console.error('Error commenting:', error);
-            window.alert('Failed to comment. Please login first!');
+            window.alert('Failed to comment.');
         }
     };
+    
 
     return (
         <div className="font-sans bg-white">
@@ -104,20 +117,21 @@ const ProductDetail = () => {
                     <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
                         <div className="lg:col-span-5">
                             <div className="bg-gray-100 rounded-lg shadow-md p-6">
-                                {/* Display previous comments */}
+                                {/* Previous comments */}
                                 {product.comment && product.comment.length > 0 && (
                                     <div className="border-t border-gray-300 pt-4 mt-4">
                                         <h4 className="text-xl font-semibold mb-4">Previous Comments</h4>
                                         {product.comment.map((commentItem, index) => (
                                             <div key={index} className="bg-white rounded-lg p-3 mb-2 shadow-md">
                                                 <p className="text-gray-800">{commentItem.comment}</p>
+                                                <p className="text-gray-500 text-sm mt-2">Posted by: {commentItem.user_name}</p>
                                                 <p className="text-gray-500 text-sm mt-2">Posted on: {new Date(commentItem.timestamp).toLocaleString()}</p>
                                             </div>
                                         ))}
                                     </div>
                                 )}
+                                {/* Add Your Comment */}
                                 <h3 className="text-2xl font-bold text-gray-900 mt-8 mb-4">Add Your Comment</h3>
-                                {/* Add a comment input field */}
                                 <textarea
                                     value={comment}
                                     onChange={(e) => setComment(e.target.value)}
