@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { getCartAPI, deleteProductInCartAPI, updateCartAPI } from '../../api/cart.api';
-import { useParams } from 'react-router-dom';
+
+import { useNavigate, useParams } from 'react-router-dom';
 import { getUserProfileFromLS } from '../../utils/localStorage';
 import { useQuery } from '@tanstack/react-query';
+import { createOrderHistoryAPI } from '../../api/orderHistory.api';
 
 const ShoppingCart = () => {
+    const navigate = useNavigate();
     const userProfile = getUserProfileFromLS();
     const { user_id } = useParams();
     const { data: cartData, refetch } = useQuery({
@@ -25,7 +28,7 @@ const ShoppingCart = () => {
     console.log('Cart:', cart);
 
     const updateSubtotal = (cartProducts) => {
-        const subTotalAmount = cartProducts.reduce((acc, item) => acc + (item.product_quantity * item.product_detail.price), 0);
+        const subTotalAmount = cartProducts.reduce((acc, item) => acc + (item.product_quantity * item.product_detail?.price), 0);
         setSubtotal(subTotalAmount);
     };
 
@@ -80,6 +83,32 @@ const ShoppingCart = () => {
         await updateCart(product_id, quantity);
     }
 
+    const handleCheckout = async () => {
+        try {
+            // Prepare order history data
+            const orderHistoryData = {
+                user_id: userProfile.id,
+                products: cart.map(item => ({
+                    product_id: item.product_id,
+                    product_quantity: item.product_quantity, // Add product_quantity to match createOrderHistory signature
+                })),
+                total_price: totalAmount // Pass totalAmount directly from orderHistoryData
+            };
+
+            // Create order history
+            await createOrderHistoryAPI(orderHistoryData);
+            console.log('Order history created:', orderHistoryData);
+
+            // Show success message or redirect to confirmation page
+            window.alert('Order placed successfully!');
+            navigate(`/orderHistory/getOrderHistoryByUserId/${userProfile.id}`);
+        } catch (error) {
+            console.error('Error creating order history:', error);
+            window.alert('Failed to place order. Please try again!');
+        }
+    }
+
+
     return (
         <div className="container mx-auto px-4 md:px-8 py-8">
             <h1 className="text-2xl font-semibold mb-4 text-center">Shopping Cart of {userProfile.full_name}</h1>
@@ -88,10 +117,10 @@ const ShoppingCart = () => {
                     {cart.map(item => (
                         <div key={item.product_id} className="border border-gray-200 rounded-md p-4 flex items-center justify-between">
                             <div className="flex items-center space-x-4">
-                                <img src={item.product_detail.image} alt={item.product_detail.name} className="w-16 h-16 rounded-md shadow-md" />
+                                <img src={item.product_detail?.image} alt={item.product_detail?.name} className="w-16 h-16 rounded-md shadow-md" />
                                 <div>
-                                    <h3 className="font-semibold text-lg">{item.product_detail.name}</h3>
-                                    <p className="text-gray-500">${item.product_detail.price}</p>
+                                    <h3 className="font-semibold text-lg">{item.product_detail?.name}</h3>
+                                    <p className="text-gray-500">${item.product_detail?.price}</p>
                                 </div>
                             </div>
                             <div>
@@ -135,7 +164,7 @@ const ShoppingCart = () => {
                             <span className="font-semibold text-lg">${totalAmount}</span>
                         </div>
                     </div>
-                    <button className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-md w-full mb-4">
+                    <button onClick={handleCheckout} className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-md w-full mb-4">
                         Proceed to Checkout
                     </button>
                 </div>

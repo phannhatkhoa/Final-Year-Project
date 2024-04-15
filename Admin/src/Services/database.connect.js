@@ -37,6 +37,9 @@ class DatabaseServices {
   get brandCollection(){
     return this.db.collection('brand');
   }
+  get orderHistoryCollection(){
+    return this.db.collection('orderHistory');
+  }
 }
 
 const databaseServices = new DatabaseServices();

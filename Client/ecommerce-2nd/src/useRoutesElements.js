@@ -25,6 +25,8 @@ import { Laptop } from './Pages/HomePage/Laptop';
 import { PhoneTemplate } from './templates/PhoneTemplate';
 import { TabletTemplate } from './templates/TabletTemplate';
 import { LaptopTemplate } from './templates/LaptopTemplate';
+import { OrderHistoryTemplate } from './templates/OrderHistoryTemplate';
+import OrderHistory from './Pages/Cart/OrderHistory';
 
 const ProtectedRoutes = () => {
   const { isAuthenticated } = useContext(AuthContext);
@@ -61,6 +63,7 @@ export default function useRoutesElements() {
         { path: 'user/profile', element: <ProfileTemplate><Profile /></ProfileTemplate> },
         { path: `cart/getCart/:user_id`, element: <CartTemplate><ShoppingCart /></CartTemplate> },
         { path: 'payment', element: <PaymentTemplate><Payment /></PaymentTemplate> },
+        {path: `orderHistory/getOrderHistoryByUserId/:user_id`, element: <OrderHistoryTemplate><OrderHistory /></OrderHistoryTemplate>},
 
       ]
     },

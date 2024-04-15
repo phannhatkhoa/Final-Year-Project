@@ -6,6 +6,7 @@ const cartRoute = require("./src/Routes/cart.route");
 const paymentRoute = require("./src/Routes/payment.route");
 const categoryRoute = require("./src/Routes/category.route");
 const brandRoute = require("./src/Routes/brand.route");
+const orderHistoryRoute = require("./src/Routes/orderHistory.route");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 
@@ -28,7 +29,7 @@ app.use("/cart",cartRoute);
 app.use("/cart",paymentRoute);
 app.use("/category",categoryRoute);
 app.use("/brand",brandRoute);
-
+app.use("/orderHistory",orderHistoryRoute);
 
 
 app.listen(PORT,()=>{
