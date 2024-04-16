@@ -108,42 +108,23 @@ router.get("/vnpay_return", async function (req, res, next) {
     const cart = await databaseServices.cartCollection.findOne({
       user_id: userId,
     });
-    const existingOrder = await databaseServices.orderHistoryCollection.findOne(
-      { user_id: userId }
-    );
 
     if (cart) {
       const orderAmount = vnp_Params["vnp_Amount"] / 100;
       const orderDate = new Date();
 
-      if (existingOrder) {
-        // Update existing order history
-        const updatedOrder = {
-          $set: {
-            products: cart.products,
-            total_price: orderAmount,
-            order_date: orderDate,
-          },
-        };
-        await databaseServices.orderHistoryCollection.updateOne(
-          { user_id: userId },
-          updatedOrder
-        );
-      } else {
-        // Create new order history
-        const newOrderHistory = new OrderHistory(
-          userId,
-          cart.products,
-          orderAmount,
-          orderDate
-        );
-        await databaseServices.orderHistoryCollection.insertOne(
-          newOrderHistory
-        );
-      }
+      // Create a new order history entry
+      const newOrderHistory = new OrderHistory(
+        userId,
+        cart.products,
+        orderAmount,
+        orderDate
+      );
+      await databaseServices.orderHistoryCollection.insertOne(newOrderHistory);
 
       // Delete the cart
       await databaseServices.cartCollection.deleteOne({ user_id: userId });
+      await updateProductQuantities(cart.products);
 
       // Redirect to order history page
       res.redirect(
@@ -154,4 +135,33 @@ router.get("/vnpay_return", async function (req, res, next) {
     }
   }
 });
+async function updateProductQuantities(cartProducts) {
+  const productServices = require("../Services/product.services");
+
+  for (const cartProduct of cartProducts) {
+    const productId = cartProduct.product_id;
+    const product =
+      await productServices.getProductById(productId);
+    if (!product) {
+      console.error(`Product with ID ${productId} not found.`);
+      continue;
+    }
+
+    // Update quantity_sold and current_quantity
+    const purchasedQuantity = cartProduct.product_quantity;
+    const updatedQuantitySold = product.quantity_sold + purchasedQuantity;
+    const updatedCurrentQuantity = product.current_quantity - purchasedQuantity;
+
+    // Update the product document
+    await databaseServices.productCollection.updateOne(
+      { _id: product._id },
+      {
+        $set: {
+          quantity_sold: updatedQuantitySold,
+          current_quantity: updatedCurrentQuantity,
+        },
+      }
+    );
+  }
+}
 module.exports = router;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FaShoppingCart } from 'react-icons/fa';
 import { AuthContext } from '../../contexts/AuthProvider';
 import { useContext } from 'react';
@@ -8,13 +8,14 @@ import { Link, useLocation } from 'react-router-dom';
 const Header = () => {
   const location = useLocation();
   const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
+  const [showDropdown, setShowDropdown] = useState(false); // State to manage dropdown visibility
+
   const handleLogout = () => {
     setIsAuthenticated(false);
     deleteUserProfileFromLS();
   };
 
   const userProfile = getUserProfileFromLS();
-  console.log(userProfile);
 
   return (
     <header className="bg-gradient-to-r from-yellow-400 to-red-500 text-white py-4">
@@ -68,26 +69,43 @@ const Header = () => {
     </nav>
 
         {/* User actions */}
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4 relative">
           {isAuthenticated ? (
             <>
-              <a href="/user/profile" className="text-white">Hello {userProfile?.email}</a>
-              {userProfile && (
-                <Link to={`/cart/getCart/${userProfile.id}`} className="text-yellow-500 hover:text-yellow-600">
-                  <FaShoppingCart className="text-2xl" />
-                </Link>
-              )}
+              <div
+                className="relative z-10"
+                onMouseEnter={() => setShowDropdown(true)}
+                onMouseLeave={() => setShowDropdown(false)}
+              >
+                <span className="text-white cursor-pointer">
+                  Hello {userProfile?.email}
+                </span>
+                {showDropdown && (
+                  <div className="absolute top-full left-0 bg-white text-gray-800 shadow-lg rounded-md py-2 w-40">
+                    <Link to="/user/profile"
+                      className="block px-4 py-2 hover:bg-gray-200"
+                    >
+                      Manage Account
+                    </Link>
+                    <Link to={`/orderHistory/getOrderHistoryByUserId/${userProfile.id}`}
+                      className="block px-4 py-2 hover:bg-gray-200">
+                      Manage Order History
+                    </Link>
+                  </div>
+                )}
+              </div>
+              <Link to={`/cart/getCart/${userProfile.id}`} className="text-yellow-500 hover:text-yellow-600">
+                <FaShoppingCart className="mr-2 text-2xl" />
+              </Link>
               <button onClick={handleLogout} className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition duration-300">
                 Logout
               </button>
             </>
           ) : (
             <>
-              {userProfile && (
-                <Link to={`/cart/getCart/${userProfile.id}`} className="text-yellow-500 hover:text-yellow-600">
-                  <FaShoppingCart className="mr-2 text-2xl" />
-                </Link>
-              )}
+              <Link to={`/cart/getCart/${userProfile.id}`} className="text-yellow-500 hover:text-yellow-600">
+                <FaShoppingCart className="mr-2 text-2xl" />
+              </Link>
               <Link to="/user/signin" className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition duration-300">
                 Login
               </Link>

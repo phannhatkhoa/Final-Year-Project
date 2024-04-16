@@ -25,42 +25,44 @@ class OrderHistoryServices {
             }
         }
     
-    async getOrderHistoryByUserId(user_id) {
-        try {
-            const userIdObject = new ObjectId(user_id);
-            const orderHistory = await databaseServices.orderHistoryCollection.findOne({ user_id: userIdObject });
-            if (!orderHistory) {
-                console.error('No order history found for user:', user_id);
+        async getOrderHistoryByUserId(user_id) {
+            try {
+                const userIdObject = new ObjectId(user_id);
+                const orderHistories = await databaseServices.orderHistoryCollection.find({ user_id: userIdObject }).toArray();
+                if (!orderHistories || orderHistories.length === 0) {
+                    console.error('No order history found for user:', user_id);
+                    return null;
+                }
+        
+                // Iterate through each order history
+                for (const orderHistory of orderHistories) {
+                    const productIds = orderHistory.products.map(product => new ObjectId(product.product_id));
+                    const products = await databaseServices.productCollection.aggregate([
+                        {
+                            '$match': {
+                                '_id': {
+                                    '$in': productIds
+                                }
+                            }
+                        }
+                    ]).toArray();
+        
+                    orderHistory.products = orderHistory.products.map(product => {
+                        const productDetail = products.find(p => p._id.equals(product.product_id));
+                        return {
+                            product_id: product.product_id,
+                            product_quantity: product.product_quantity,
+                            product_detail: productDetail
+                        };
+                    });
+                }
+        
+                return orderHistories;
+            } catch (error) {
+                console.error('Error getting order history:', error.message);
                 return null;
             }
-    
-            const productIds = orderHistory.products.map(product => new ObjectId(product.product_id));
-            const products = await databaseServices.productCollection.aggregate([
-                {
-                    '$match': {
-                        '_id': {
-                            '$in': productIds
-                        }
-                    }
-                }
-            ]).toArray();
-    
-            orderHistory.products = orderHistory.products.map(product => {
-                const productDetail = products.find(p => p._id.equals(product.product_id));
-                return {
-                    product_id: product.product_id,
-                    product_quantity: product.product_quantity,
-                    product_detail: productDetail
-                };
-            });
-    
-            return orderHistory;
-        } catch (error) {
-            console.error('Error getting order history:', error.message);
-            return null;
         }
-    }
-    
     
 }
 
