@@ -25,22 +25,6 @@ class OrderHistoryServices {
             }
         }
     
-
-
-    async updateOrderStatus(orderId, newStatus) {
-        try {
-            // Update the order status
-            await orderHistoryCollection.updateOne(
-                { _id: new ObjectId(orderId) },
-                { $set: { status: newStatus } }
-            );
-            return true;
-        } catch (error) {
-            console.error('Error updating order status:', error.message);
-            return false;
-        }
-    }
-
     async getOrderHistoryByUserId(user_id) {
         try {
             const userIdObject = new ObjectId(user_id);
@@ -76,9 +60,6 @@ class OrderHistoryServices {
             return null;
         }
     }
-    
-
-    
     
     
 }
