@@ -45,3 +45,21 @@ export const addProductAPI = async (body) => {
         throw error;
     }
 }
+
+export const deleteProductAPI = async (id) => {
+    try {
+        const response = await httpConnection.delete(`/admin/deleteProduct/${id}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const editProductAPI = async (id, body) => {
+    try {
+        const response = await httpConnection.put(`/admin/updateProduct/${id}`, body);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}

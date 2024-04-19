@@ -26,7 +26,7 @@ export const AddProducts = () => {
     if (brandData && brandData.data && brandData.data.brands) {
         brands = brandData.data.brands;
     }
-    console.log(brandData);
+
     const [formData, setFormData] = useState({
         name: "",
         price: "",
@@ -108,8 +108,9 @@ export const AddProducts = () => {
     return (
         <div className="container mx-auto mb-20">
             <h1 className="text-2xl font-bold text-center mb-4">Add Product</h1>
-            <form onSubmit={onSubmit} className="max-w-lg mx-auto">
-                <div className="mb-6">
+            <form onSubmit={onSubmit} className="max-w-lg mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                {/* Name */}
+                <div className="mb-4">
                     <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">Name</label>
                     <input
                         type="text"
@@ -117,10 +118,28 @@ export const AddProducts = () => {
                         name="name"
                         value={formData.name}
                         onChange={handleInputChange}
-                        className="border rounded px-4 py-2 w-full focus:outline-none focus:border-blue-500"
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     />
                 </div>
-                <div className="mb-6">
+                {/* Image */}
+                <div className="mb-4">
+                    <label htmlFor="image" className="block text-gray-700 text-sm font-bold mb-2">Choose Image</label>
+                    <input
+                        type="file"
+                        id="image"
+                        name="image"
+                        accept=".jpg, .jpeg, .png"
+                        onChange={onImageChange}
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    />
+                    {selectedImage && (
+                        <img src={URL.createObjectURL(selectedImage)} alt="Selected Image" className="mt-2 w-full" />
+                    )}
+                    {uploadProgress > 0 && <p className="mt-2 text-sm text-gray-600">Upload Progress: {uploadProgress}%</p>}
+                </div>
+
+                {/* Price */}
+                <div className="mb-4">
                     <label htmlFor="price" className="block text-gray-700 text-sm font-bold mb-2">Price</label>
                     <input
                         type="text"
@@ -128,27 +147,29 @@ export const AddProducts = () => {
                         name="price"
                         value={formData.price}
                         onChange={handleInputChange}
-                        className="border rounded px-4 py-2 w-full focus:outline-none focus:border-blue-500"
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     />
                 </div>
-                <div className="mb-6">
+                {/* Description */}
+                <div className="mb-4">
                     <label htmlFor="description" className="block text-gray-700 text-sm font-bold mb-2">Description</label>
                     <textarea
                         id="description"
                         name="description"
                         value={formData.description}
                         onChange={handleInputChange}
-                        className="border rounded px-4 py-2 w-full focus:outline-none focus:border-blue-500"
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     ></textarea>
                 </div>
-                <div className="mb-6">
+                {/* Category */}
+                <div className="mb-4">
                     <label htmlFor="category_id" className="block text-gray-700 text-sm font-bold mb-2">Category</label>
                     <select
                         id="category_id"
                         name="category_id"
                         value={formData.category_id}
                         onChange={handleInputChange}
-                        className="border rounded px-4 py-2 w-full focus:outline-none focus:border-blue-500"
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     >
                         <option value="">Select a category</option>
                         {categories &&
@@ -160,51 +181,7 @@ export const AddProducts = () => {
                         }
                     </select>
                 </div>
-                <div className="mb-6">
-                    <label htmlFor="usage_status" className="block text-gray-700 text-sm font-bold mb-2">Usage Status</label>
-                    <input
-                        type="text"
-                        id="usage_status"
-                        name="usage_status"
-                        value={formData.usage_status}
-                        onChange={handleInputChange}
-                        className="border rounded px-4 py-2 w-full focus:outline-none focus:border-blue-500"
-                    />
-                </div>
-                <div className="mb-6 flex flex-col items-center">
-                    <label htmlFor="image" className="block text-gray-700 text-sm font-bold mb-2">Choose Image</label>
-                    <div className="relative w-32 h-32 rounded-full overflow-hidden">
-                        {selectedImage ? (
-                            <img src={URL.createObjectURL(selectedImage)} alt="Choose Image" className="w-full h-full object-cover" />
-                        ) : (
-                            <img src={formData.image || "placeholder.jpg"} alt="Choose Image" className="w-full h-full object-cover" />
-                        )}
-                        <input type="file" accept="image/*" onChange={onImageChange} className="absolute inset-0 opacity-0 cursor-pointer" />
-                    </div>
-                    {uploadProgress > 0 && <p className="mt-2 text-sm text-gray-600">Upload Progress: {uploadProgress}%</p>}
-                </div>
-                <div className="mb-6">
-                    <label htmlFor="current_quantity" className="block text-gray-700 text-sm font-bold mb-2">Current Quantity</label>
-                    <input
-                        type="text"
-                        id="current_quantity"
-                        name="current_quantity"
-                        value={formData.current_quantity}
-                        onChange={handleInputChange}
-                        className="border rounded px-4 py-2 w-full focus:outline-none focus:border-blue-500"
-                    />
-                </div>
-                <div className="mb-6">
-                    <label htmlFor="quantity_sold" className="block text-gray-700 text-sm font-bold mb-2">Quantity Sold</label>
-                    <input
-                        type="text"
-                        id="quantity_sold"
-                        name="quantity_sold"
-                        value={formData.quantity_sold}
-                        onChange={handleInputChange}
-                        className="border rounded px-4 py-2 w-full focus:outline-none focus:border-blue-500"
-                    />
-                </div>
+                {/* Brand */}
                 <div className="mb-6">
                     <label htmlFor="brand_id" className="block text-gray-700 text-sm font-bold mb-2">Brand</label>
                     <select
@@ -212,7 +189,7 @@ export const AddProducts = () => {
                         name="brand_id"
                         value={formData.brand_id}
                         onChange={handleInputChange}
-                        className="border rounded px-4 py-2 w-full focus:outline-none focus:border-blue-500"
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     >
                         <option value="">Select a brand</option>
                         {brands &&
@@ -224,10 +201,47 @@ export const AddProducts = () => {
                         }
                     </select>
                 </div>
+                {/* Usage Status */}
+                <div className="mb-4">
+                    <label htmlFor="usage_status" className="block text-gray-700 text-sm font-bold mb-2">Usage Status</label>
+                    <input
+                        type="text"
+                        id="usage_status"
+                        name="usage_status"
+                        value={formData.usage_status}
+                        onChange={handleInputChange}
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    />
+                </div>
+                {/* Current Quantity */}
+                <div className="mb-4">
+                    <label htmlFor="current_quantity" className="block text-gray-700 text-sm font-bold mb-2">Current Quantity</label>
+                    <input
+                        type="text"
+                        id="current_quantity"
+                        name="current_quantity"
+                        value={formData.current_quantity}
+                        onChange={handleInputChange}
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    />
+                </div>
+                {/* Quantity Sold */}
+                <div className="mb-4">
+                    <label htmlFor="quantity_sold" className="block text-gray-700 text-sm font-bold mb-2">Quantity Sold</label>
+                    <input
+                        type="text"
+                        id="quantity_sold"
+                        name="quantity_sold"
+                        value={formData.quantity_sold}
+                        onChange={handleInputChange}
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    />
+                </div>
+                {/* Submit Button */}
                 <div className="mb-6 text-center">
                     <button
                         type="submit"
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none inline-block"
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                     >
                         Add Product
                     </button>

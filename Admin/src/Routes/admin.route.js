@@ -1,4 +1,4 @@
-const { getAllUsersController, updateUserRoleController, getAllProductsController, deleteUserController, addProductController } = require("../Controllers/admin.controller");
+const { getAllUsersController, updateUserRoleController, getAllProductsController, deleteUserController, addProductController, deleteProductController, editProductController } = require("../Controllers/admin.controller");
 const express = require("express");
 const router = express.Router();
 
@@ -42,4 +42,21 @@ router.delete("/deleteUser/:id", deleteUserController);
 // Request: { name, price, description, category_id, usage_status, image, current_quantity, quantity_sold, brand_id }
 // Response: { message: "Product added successfully" }
 router.post("/addProduct", addProductController);
+
+// delete product for admin
+// Path: /admin/deleteProduct/:id
+// Method: DELETE
+// Access: Private
+// Request: { token }
+// Response: { message: "Product deleted successfully" }
+router.delete("/deleteProduct/:id", deleteProductController);
+
+// update product for admin
+// Path: /admin/updateProduct/:id
+// Method: PUT
+// Access: Private
+// Request: { updatedData }
+// Response: { message: "Product updated successfully" }
+router.put("/updateProduct/:id", editProductController);
+
 module.exports = router;

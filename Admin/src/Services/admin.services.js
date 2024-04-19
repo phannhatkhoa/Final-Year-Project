@@ -24,7 +24,7 @@ class AdminService {
             return null;
         }
     }
-    
+
     async getAllProducts() {
         try {
             const products = await databaseServices.productCollection.aggregate(
@@ -67,10 +67,10 @@ class AdminService {
             console.error('Error during deleting user:', error.message);
             return null;
         }
-    
+
     }
 
-    async addProduct(body){
+    async addProduct(body) {
         try {
             const { name, price, description, category_id, usage_status, image, current_quantity, quantity_sold, brand_id } = body;
 
@@ -92,6 +92,29 @@ class AdminService {
             return newProduct;
         } catch (error) {
             console.error('Error during product creation:', error.message);
+            return null;
+        }
+    }
+
+    async deleteProduct(id) {
+        try {
+            await databaseServices.productCollection.deleteOne({ _id: new ObjectId(id) });
+            return { message: "Product deleted successfully" }
+        } catch (error) {
+            console.error('Error during deleting product:', error.message);
+            return null;
+        }
+    }
+
+    async editProduct(id, updatedData) {
+        try {
+            await databaseServices.productCollection.updateOne(
+                { _id: new ObjectId(id) },
+                { $set: updatedData }
+            );
+            return { message: "Product updated successfully" }
+        } catch (error) {
+            console.error('Error during updating product:', error.message);
             return null;
         }
     }
