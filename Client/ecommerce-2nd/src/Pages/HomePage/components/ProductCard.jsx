@@ -1,7 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { FaHeart } from 'react-icons/fa';
+
 
 const ProductCard = ({ product }) => {
-  // Function to truncate the product name
+  const [isLiked, setIsLiked] = useState(false); // State to track if the icon is clicked
+
+  // Function to toggle the like state
+  const toggleLike = (event) => {
+    event.preventDefault(); // Prevent default behavior of click event
+    setIsLiked(!isLiked);
+  };
+
   const truncateProductName = (name, maxLength) => {
     return name.length > maxLength ? name.substring(0, maxLength) + '...' : name;
   };
@@ -15,12 +24,20 @@ const ProductCard = ({ product }) => {
         style={{ aspectRatio: '16/9' }}
       />
       <div className="px-6 py-4">
-        <div className="font-bold text-xl mb-2 text-gray-800">
-        {truncateProductName(product.name, 20)} {/* Limiting product name to 20 characters */}
+        <div className="flex justify-between items-center mb-2">
+          <div className="font-bold text-xl text-gray-800">
+            {truncateProductName(product.name, 20)}
+          </div>
+          <div onClick={toggleLike}>
+            <FaHeart
+              className={`text-xl cursor-pointer ${isLiked ? 'text-red-500' : 'text-gray-500'}`}
+              onClick={toggleLike}
+            />
+          </div>
         </div>
         <p className="text-gray-700">Price: ${product.price}</p>
         <p className="text-gray-700">Brand: {product.brand.name}</p>
-        <p className = "text-gray-700">Sold: {product.quantity_sold}</p>
+        <p className="text-gray-700">Sold: {product.quantity_sold}</p>
       </div>
     </div>
   );

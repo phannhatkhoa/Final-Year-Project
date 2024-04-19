@@ -1,5 +1,6 @@
 const { ObjectId } = require("mongodb");
 const databaseServices = require("./database.connect");
+const Product = require('../Class/product.class');
 
 class AdminService {
     async getAllUsers() {
@@ -67,6 +68,32 @@ class AdminService {
             return null;
         }
     
+    }
+
+    async addProduct(body){
+        try {
+            const { name, price, description, category_id, usage_status, image, current_quantity, quantity_sold, brand_id } = body;
+
+            const categoryId = new ObjectId(category_id);
+            const brandId = new ObjectId(brand_id);
+
+            const category = await databaseServices.categoryCollection.findOne({ _id: categoryId });
+            if (!category) {
+                throw new Error('Invalid category_id');
+            }
+
+            const brand = await databaseServices.brandCollection.findOne({ _id: brandId });
+            if (!brand) {
+                throw new Error('Invalid brand_id');
+            }
+
+            const newProduct = new Product(name, price, description, categoryId, usage_status, image, current_quantity, quantity_sold, brandId);
+            await databaseServices.productCollection.insertOne(newProduct);
+            return newProduct;
+        } catch (error) {
+            console.error('Error during product creation:', error.message);
+            return null;
+        }
     }
 }
 

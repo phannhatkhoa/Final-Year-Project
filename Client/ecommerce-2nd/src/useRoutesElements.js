@@ -27,6 +27,7 @@ import { TabletTemplate } from "./templates/TabletTemplate";
 import { LaptopTemplate } from "./templates/LaptopTemplate";
 import { OrderHistoryTemplate } from "./templates/OrderHistoryTemplate";
 import OrderHistory from "./Pages/Cart/OrderHistory";
+import { AddProducts } from "./Pages/Auth/Admin/AddProducts";
 
 const ProtectedRoutes = () => {
   const { isAuthenticated } = useContext(AuthContext);
@@ -175,6 +176,14 @@ export default function useRoutesElements() {
             </AdminTemplate>
           ),
         },
+        {
+          path: "admin/createProduct",
+          element: (
+            <AdminTemplate>
+              <AddProducts />
+            </AdminTemplate>
+          ),
+        }
       ],
     },
   ]);

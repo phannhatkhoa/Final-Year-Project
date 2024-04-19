@@ -1,5 +1,7 @@
 const adminService = require('../Services/admin.services');
 
+
+
 const getAllUsersController = async (req, res, next) => {
     const users = await adminService.getAllUsers();
     return res.status(200).json({ message: "All users", users: users })
@@ -43,9 +45,25 @@ const deleteUserController = async (req, res, next) => {
     }
 };
 
+const addProductController = async (req, res, next) => {
+    try {
+        const newProduct = req.body;
+        const addedProduct = await adminService.addProduct(newProduct);
+        if (addedProduct) {
+            return res.status(200).json({ message: "Product added successfully" });
+        } else {
+            return res.status(500).json({ message: "Internal server error" });
+        }
+    } catch (error) {
+        console.error("Error adding product:", error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+}
+
 module.exports = {
     getAllUsersController,
     updateUserRoleController,
     getAllProductsController,
-    deleteUserController
+    deleteUserController,
+    addProductController
 }

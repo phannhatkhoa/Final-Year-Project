@@ -29,7 +29,7 @@ export const Home = () => {
   if (categoryData && categoryData.data) {
     categories = categoryData.data.data.categories;
   }
-  
+
 
   // Sorting products
   if (products) {
@@ -97,7 +97,7 @@ export const Home = () => {
               {filteredProducts && (
                 <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                   {filteredProducts
-                    .filter(product => product.category_id === category._id) 
+                    .filter(product => product.category_id === category._id)
                     .map(product => (
                       <Link to={`/product/getProduct/${product._id}`} key={product._id}>
                         <ProductCard product={product} />

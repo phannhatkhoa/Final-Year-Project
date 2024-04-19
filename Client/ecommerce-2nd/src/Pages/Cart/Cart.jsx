@@ -127,7 +127,6 @@ const ShoppingCart = () => {
       .then((response) => {
         const paymentUrl = response.data;
         window.location.href = paymentUrl;
-        window.alert("Payment successfully!");
       })
       .catch((error) => {
         console.error("Error creating payment:", error);

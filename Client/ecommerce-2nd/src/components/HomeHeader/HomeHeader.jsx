@@ -24,49 +24,49 @@ const Header = () => {
 
         {/* Navigation menu */}
         <nav className="flex space-x-4">
-      <ul className="flex space-x-4">
-        <li>
-          <Link
-            to="/home"
-            className={`text-white transition duration-300 ${location.pathname === '/home' ? 'text-yellow-200' : 'hover:text-yellow-200'}`}
-          >
-            Home
-          </Link>
-        </li>
-        <li>
-          <Link
-            to="/phone"
-            className={`text-white transition duration-300 ${location.pathname === '/phone' ? 'text-yellow-200' : 'hover:text-yellow-200'}`}
-          >
-            Phone
-          </Link>
-        </li>
-        <li>
-          <Link
-            to="/tablet"
-            className={`text-white transition duration-300 ${location.pathname === '/tablet' ? 'text-yellow-200' : 'hover:text-yellow-200'}`}
-          >
-            Tablet
-          </Link>
-        </li>
-        <li>
-          <Link
-            to="/laptop"
-            className={`text-white transition duration-300 ${location.pathname === '/laptop' ? 'text-yellow-200' : 'hover:text-yellow-200'}`}
-          >
-            Laptop
-          </Link>
-        </li>
-        <li>
-          <Link
-            to="/aboutUs"
-            className={`text-white transition duration-300 ${location.pathname === '/aboutUs' ? 'text-yellow-200' : 'hover:text-yellow-200'}`}
-          >
-            About Us
-          </Link>
-        </li>
-      </ul>
-    </nav>
+          <ul className="flex space-x-4">
+            <li>
+              <Link
+                to="/home"
+                className={`text-white transition duration-300 ${location.pathname === '/home' ? 'text-yellow-200' : 'hover:text-yellow-200'}`}
+              >
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/phone"
+                className={`text-white transition duration-300 ${location.pathname === '/phone' ? 'text-yellow-200' : 'hover:text-yellow-200'}`}
+              >
+                Phone
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/tablet"
+                className={`text-white transition duration-300 ${location.pathname === '/tablet' ? 'text-yellow-200' : 'hover:text-yellow-200'}`}
+              >
+                Tablet
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/laptop"
+                className={`text-white transition duration-300 ${location.pathname === '/laptop' ? 'text-yellow-200' : 'hover:text-yellow-200'}`}
+              >
+                Laptop
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/aboutUs"
+                className={`text-white transition duration-300 ${location.pathname === '/aboutUs' ? 'text-yellow-200' : 'hover:text-yellow-200'}`}
+              >
+                About Us
+              </Link>
+            </li>
+          </ul>
+        </nav>
 
         {/* User actions */}
         <div className="flex items-center space-x-4 relative">
@@ -94,18 +94,22 @@ const Header = () => {
                   </div>
                 )}
               </div>
-              <Link to={`/cart/getCart/${userProfile.id}`} className="text-yellow-500 hover:text-yellow-600">
-                <FaShoppingCart className="mr-2 text-2xl" />
-              </Link>
+              {userProfile && (
+                <Link to={`/cart/getCart/${userProfile.id}`} className="text-yellow-500 hover:text-yellow-600">
+                  <FaShoppingCart className="mr-2 text-2xl" />
+                </Link>
+              )}
               <button onClick={handleLogout} className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition duration-300">
                 Logout
               </button>
             </>
           ) : (
             <>
-              <Link to={`/cart/getCart/${userProfile.id}`} className="text-yellow-500 hover:text-yellow-600">
-                <FaShoppingCart className="mr-2 text-2xl" />
-              </Link>
+              {userProfile && (
+                <Link to={`/cart/getCart/${userProfile.id}`} className="text-yellow-500 hover:text-yellow-600">
+                  <FaShoppingCart className="mr-2 text-2xl" />
+                </Link>
+              )}
               <Link to="/user/signin" className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition duration-300">
                 Login
               </Link>

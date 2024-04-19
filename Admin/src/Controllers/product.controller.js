@@ -68,7 +68,7 @@ const deleteProductController = async (req, res) => {
 // }
 
 const addCommentController = async (req, res) => {
-    try{
+    try {
         const comment = await productServices.commentProduct(req.body);
         console.log(comment);
         if (comment) {

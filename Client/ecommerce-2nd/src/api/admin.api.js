@@ -36,3 +36,12 @@ export const deleteUserAPI = async (id) => {
         throw error;
     }
 }
+
+export const addProductAPI = async (body) => {
+    try {
+        const response = await httpConnection.post('/admin/addProduct', body);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+}
