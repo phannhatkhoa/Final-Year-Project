@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { deleteProductAPI, editProductAPI, getAllProductAPI } from '../../../api/admin.api';
-import { getCategoryAPI } from '../../../api/category.api';
-import { getAllBrandAPI } from '../../../api/brand.api';
+import { toast } from 'react-hot-toast';
 
 export const DisplayProduct = () => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -50,7 +49,7 @@ export const DisplayProduct = () => {
         } finally {
             setUpdating(false);
         }
-        window.alert('Product updated successfully!');
+        toast.success('Product updated successfully!');
     }
 
     const totalPages = Math.ceil((data?.products?.length || 0) / pageSize);
@@ -65,7 +64,7 @@ export const DisplayProduct = () => {
         console.log('Delete product:', id);
         try {
             await deleteProductAPI(id);
-            window.alert('Product deleted successfully');
+            toast.success('Product deleted successfully');
             await refetch();
         } catch (error) {
             console.log('Error:', error);

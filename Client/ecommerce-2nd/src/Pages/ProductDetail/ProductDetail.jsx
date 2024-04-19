@@ -1,9 +1,11 @@
-import React,  {useState}  from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { commentProductAPI, getProductByIdAPI } from '../../api/product.api';
 import { useNavigate, useParams } from 'react-router-dom';
 import { addToCartAPI } from '../../api/cart.api';
 import { getUserProfileFromLS } from '../../utils/localStorage';
+import { toast } from 'react-hot-toast';
+
 
 const ProductDetail = () => {
     const navigate = useNavigate();
@@ -21,22 +23,26 @@ const ProductDetail = () => {
 
     const handleAddToCart = async () => {
         if (isSuccess && product) {
-            try {
-                const cart = await addToCartAPI({
-                    user_id: user.id,
-                    product_id: product._id,
-                    product_quantity: 1
-
-                });
-                console.log(cart);
-                window.alert('Product added to cart successfully!');
-            } catch (error) {
-                window.alert('Failed to add product to cart. Please login first!');
-                navigate('/user/signin')
-                console.error('Error adding to cart:', error);
+            // Check if product is in stock
+            if (product.current_quantity > 0) {
+                try {
+                    const cart = await addToCartAPI({
+                        user_id: user.id,
+                        product_id: product._id,
+                        product_quantity: 1
+                    });
+                    console.log(cart);
+                    toast.success('Product added to cart successfully!');
+                } catch (error) {
+                    toast.error('Failed to add product to cart. Please try again later.');
+                    console.error('Error adding to cart:', error);
+                }
+            } else {
+                toast.error('This product is currently out of stock.');
             }
         }
     };
+
 
     const handleBuyNow = async () => {
         if (isSuccess && product) {
@@ -48,10 +54,10 @@ const ProductDetail = () => {
                 });
                 console.log(cart);
                 navigate(`/cart/getCart/${user.id}`);
-                window.alert('Product added to cart successfully! Please proceed to checkout.')
+                toast.success('Product added to cart successfully! Please proceed to checkout.')
             } catch (error) {
                 console.error('Error buying now:', error);
-                window.alert('Failed to buy product. Please login first!');
+                toast.error('Failed to buy product. Please login first!');
             }
             console.log(`Buying now: ${product.name}`);
         }
@@ -60,7 +66,7 @@ const ProductDetail = () => {
     const handleCommentSubmit = async () => {
         try {
             if (!user) {
-                window.alert('Please login first to comment.');
+                toast.error('Please login first to comment.');
                 navigate('/user/signin');
                 return;
             }
@@ -71,19 +77,19 @@ const ProductDetail = () => {
                 comment: comment
             });
 
-            window.alert('Comment added successfully!');
+            toast.success('Comment added successfully!');
             setComment('');
             // Refetch product data to update comments
             refetch();
         } catch (error) {
             console.error('Error commenting:', error);
-            window.alert('Failed to comment.');
+            toast.error('Failed to comment.');
         }
     };
-    
+
 
     return (
-        <div className="font-sans bg-white">
+        <div className="font-sans bg-white mb-20">
             {isSuccess && product && (
                 <div className="p-6 lg:max-w-7xl max-w-4xl mx-auto">
                     <div className="grid items-start grid-cols-1 lg:grid-cols-5 gap-12 shadow-md p-6">
@@ -113,7 +119,7 @@ const ProductDetail = () => {
                 </div>
             )}
             {isSuccess && product && (
-                <div className="p-6 lg:max-w-7xl max-w-4xl mx-auto">
+                <div className="p-6 lg:max-w-7xl max-w-4xl mx-auto mb-20">
                     <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
                         <div className="lg:col-span-5">
                             <div className="bg-gray-100 rounded-lg shadow-md p-6">

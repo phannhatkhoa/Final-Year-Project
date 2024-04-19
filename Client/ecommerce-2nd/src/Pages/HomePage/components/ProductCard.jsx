@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { FaHeart } from 'react-icons/fa';
 
-
 const ProductCard = ({ product }) => {
   const [isLiked, setIsLiked] = useState(false); // State to track if the icon is clicked
 
@@ -37,7 +36,11 @@ const ProductCard = ({ product }) => {
         </div>
         <p className="text-gray-700">Price: ${product.price}</p>
         <p className="text-gray-700">Brand: {product.brand.name}</p>
-        <p className="text-gray-700">Sold: {product.quantity_sold}</p>
+        {product.current_quantity > 0 ? (
+          <p className="text-gray-700">Sold: {product.quantity_sold}</p>
+        ) : (
+          <p className="text-red-500">Out of Stock</p>
+        )}
       </div>
     </div>
   );

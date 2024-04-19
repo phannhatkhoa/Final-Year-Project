@@ -10,6 +10,7 @@ import { getUserProfileFromLS } from "../../utils/localStorage";
 import { useQuery } from "@tanstack/react-query";
 import { createOrderHistoryAPI } from "../../api/orderHistory.api";
 import axios from "axios";
+import { toast } from "react-hot-toast";
 
 const ShoppingCart = () => {
   const navigate = useNavigate();
@@ -66,10 +67,10 @@ const ShoppingCart = () => {
         user_id: userProfile.id,
         product_id: product_id,
       });
-      window.alert("Product deleted successfully!");
+      toast.success("Product deleted successfully!");
       await refetch();
     } catch (error) {
-      window.alert("Failed to delete product. Please try again!");
+      toast.error("Failed to delete product. Please try again!");
       console.error("Error deleting product:", error);
     }
   };
@@ -130,7 +131,7 @@ const ShoppingCart = () => {
       })
       .catch((error) => {
         console.error("Error creating payment:", error);
-        window.alert("Failed to create payment. Please try again!");
+        toast.success("Failed to create payment. Please try again!");
       });
   };
 

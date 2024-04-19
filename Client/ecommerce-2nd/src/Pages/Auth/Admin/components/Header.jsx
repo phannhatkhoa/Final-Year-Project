@@ -7,7 +7,6 @@ const AdminHeader = () => {
     const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
     const navigate = useNavigate();
     const userProfile = getUserProfileFromLS();
-    const [isOpen, setIsOpen] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false); // State for dropdown visibility
 
     const handleLogout = () => {

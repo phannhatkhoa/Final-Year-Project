@@ -5,6 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 import { AuthContext } from '../../../contexts/AuthProvider';
 import { LoginAPI } from '../../../api/auth.api';
 import { saveUserProfileFromLS } from '../../../utils/localStorage';
+import { toast } from 'react-hot-toast';
 
 export default function Login() {
   const { register, handleSubmit, formState: { errors }, setError } = useForm();
@@ -29,7 +30,7 @@ export default function Login() {
 
         saveUserProfileFromLS(data.data.user);
         console.log('User:', data.data.user);
-        window.alert('Login successfully!');
+        toast.success('Login successfully!');
       },
       onError: (error) => {
         console.log('Error occurred:', error);
@@ -99,7 +100,7 @@ export default function Login() {
             </div>
             <button
               type="submit"
-              disabled={mutation.isLoading} 
+              disabled={mutation.isLoading}
               className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none relative group mt-4"
             >
               {mutation.isLoading ? 'Logging in...' : 'Login'}

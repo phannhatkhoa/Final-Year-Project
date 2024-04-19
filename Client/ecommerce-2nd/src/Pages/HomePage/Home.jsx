@@ -93,7 +93,7 @@ export const Home = () => {
         {categories && categories.map(category => (
           <div key={category._id}>
             <h2 className="text-3xl font-bold mb-4 text-center text-gray-800 border-b-4 border-black-500 w-3/4 mx-auto pb-2">{category.name}</h2>
-            <div className="container mx-auto mb-4">
+            <div className="container mx-auto mb-10">
               {filteredProducts && (
                 <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                   {filteredProducts

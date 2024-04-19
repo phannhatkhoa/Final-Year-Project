@@ -6,6 +6,7 @@ import App from './App';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { AuthProvider } from './contexts/AuthProvider';
+import { Toaster } from 'react-hot-toast';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -16,6 +17,7 @@ root.render(
     <AuthProvider>
     <QueryClientProvider client={queryClient}>
     <App/>
+    <Toaster/>
     <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
     </AuthProvider>
