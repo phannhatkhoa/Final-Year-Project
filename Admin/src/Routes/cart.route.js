@@ -1,7 +1,7 @@
 const express = require("express");
-const cartMiddlewares = require("../Middlewares/cart.middlewares");
 const { addToCartController, getCartController, deleteCartController, updateCartController, deleteProductInCartController } = require("../Controllers/cart.controller");
 const { route } = require("./auth.route");
+const { addToCartMiddlewares, deleteProductInCartMiddlewares, updateCartMiddlewares } = require("../Middlewares/cart.middlewares");
 const router = express.Router();
 
 // add to cart
@@ -10,7 +10,7 @@ const router = express.Router();
 // access: Private
 // Request: { product_id, quantity }
 // Response: { message: "Product added to cart", cart: { user_id, products: [{ product_id, quantity }] } }
-router.post("/addToCart", addToCartController);
+router.post("/addToCart", addToCartMiddlewares, addToCartController);
 
 // get cart
 // path: cart/getCart
@@ -34,8 +34,8 @@ router.delete("/deleteCart/:id", deleteCartController);
 // access: Private
 // Request: { user_id, products: [{ product_id, quantity }] }
 // Response: { message: "Cart updated", cart: { user_id, products: [{ product_id, quantity }] } }
-router.put("/updateCart", updateCartController);
+router.put("/updateCart", updateCartMiddlewares, updateCartController);
 
-router.delete("/deleteProductInCart", deleteProductInCartController);
+router.delete("/deleteProductInCart", deleteProductInCartMiddlewares, deleteProductInCartController);
 
 module.exports = router;

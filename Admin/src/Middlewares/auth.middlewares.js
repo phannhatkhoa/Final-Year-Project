@@ -108,8 +108,54 @@ const accessTokenMiddleware = validate(checkSchema({
 }));
 
 
+const deleteUserMiddleware = validate(checkSchema({
+  id: {
+    in: ['params'],
+    isString: { errorMessage: 'Id must be a string.' },
+    notEmpty: true,
+  }
+}));
+
+const updateProfileMiddleware = validate(checkSchema({
+  id: {
+    in: ['params'],
+    isString: { errorMessage: 'Id must be a string.' },
+    notEmpty: true,
+  },
+  email: {
+    isEmail: true,
+    normalizeEmail: true,
+    errorMessage: 'Invalid email address',
+  },
+  full_name: {
+    notEmpty: true,
+    isLength: {
+      options: { min: 1 },
+      errorMessage: 'Full name is required',
+    },
+  },
+  date_of_birth: {
+    isISO8601: {
+      errorMessage: 'Invalid date format (ISO 8601 expected)',
+    },
+    notEmpty: true,
+  },
+  location: {
+    notEmpty: {
+      errorMessage: 'Location is required',
+    },
+    isLength: {
+      options: { min: 1, max: 60 },
+      errorMessage: 'Location must be at most 60 characters long',
+    },
+  },
+
+}));
+
 module.exports = {
   signupMiddleware,
   signinMiddleware,
   accessTokenMiddleware,
+  deleteUserMiddleware,
+  updateProfileMiddleware
 };

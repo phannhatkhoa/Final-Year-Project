@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { deleteUserAPI, getAllUserAPI, updateUserRoleAPI } from "../../../api/admin.api";
+import { toast } from "react-hot-toast";
 
 export const UserPage = () => {
     const { data, refetch } = useQuery({
@@ -22,8 +23,10 @@ export const UserPage = () => {
         if (selectedUserId) {
             try {
                 await updateUserRoleAPI(selectedUserId, role);
+                toast.success('Role updated successfully');
                 await refetch();
             } catch (error) {
+                toast.error('Failed to update role. Please try again.');
                 console.log('Error:', error);
             }
         }
@@ -35,6 +38,7 @@ export const UserPage = () => {
         console.log('Delete user:', id);
         try {
             await deleteUserAPI(id);
+            toast.success('User deleted successfully');
             await refetch();
         } catch (error) {
             console.log('Error:', error);

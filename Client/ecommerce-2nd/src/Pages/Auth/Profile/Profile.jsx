@@ -4,6 +4,7 @@ import { ProfileAPI, UpdateProfileAPI } from '../../../api/auth.api';
 import { getUserProfileFromLS, saveUserProfileFromLS } from '../../../utils/localStorage';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { storage } from '../../../utils/config';
+import { toast } from 'react-hot-toast';
 
 const ProfilePage = () => {
   const userProfile = getUserProfileFromLS();
@@ -40,6 +41,7 @@ const ProfilePage = () => {
     try {
       setUpdating(true);
       await UpdateProfileAPI(userProfile.id, formData);
+      toast.success('Profile updated successfully');
       await refetch();
       setEditing(false);
       saveUserProfileFromLS({
@@ -47,11 +49,11 @@ const ProfilePage = () => {
         ...formData
       });
     } catch (error) {
+      toast.error('Failed to update profile. Please try again.');
       console.error('Error updating profile:', error);
     } finally {
       setUpdating(false);
     }
-    window.alert('Profile updated successfully!');
   };
 
   const handleChange = (event) => {

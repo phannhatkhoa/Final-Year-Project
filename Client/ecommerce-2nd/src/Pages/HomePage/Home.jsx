@@ -54,7 +54,7 @@ export const Home = () => {
 
   return (
     <div>
-      <div className="mt4 mb-8">
+      <div className="mt10 mb-8">
         <Banner />
       </div>
 

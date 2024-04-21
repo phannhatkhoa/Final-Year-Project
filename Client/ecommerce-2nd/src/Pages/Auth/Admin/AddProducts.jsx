@@ -21,6 +21,7 @@ export const AddProducts = () => {
         queryKey: ['brands'],
         queryFn: () => getAllBrandAPI()
     });
+    console.log("BrandData:", brandData);
 
     let brands = null;
     if (brandData && brandData.data && brandData.data.brands) {

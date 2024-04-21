@@ -1,5 +1,6 @@
 const express = require("express");
 const { createOrderHistory, getOrderHistoryByUserId } = require("../Controllers/orderHistory.controller");
+const createOrderHistoryMiddleware = require("../Middlewares/orderhistory.middlewares");
 const router = express.Router();
 
 // createOrderHistory
@@ -8,7 +9,7 @@ const router = express.Router();
 // access: Private
 // Request: { user_id, product_id, quantity, total_price, status, order_date, delivery_date }
 // Response: { message: 'Order history created successfully', orderHistory }
-router.post("/create", createOrderHistory);
+router.post("/create", createOrderHistoryMiddleware, createOrderHistory);
 
 // getOrderHistoryByUserId
 // path: /orderHistory/getOrderHistoryByUserId/:userId

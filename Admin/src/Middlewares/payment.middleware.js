@@ -1,29 +1,29 @@
 const validate = require("../Utils/validation");
 
 const paymentMiddleware = validate(checkSchema({
-    user_id: {
-        isMongoId: true,
-        errorMessage: 'Invalid user_id',
-    },
-    cart_id: {
-        isMongoId: true,
-        errorMessage: 'Invalid cart_id',
-    },
     payment_method: {
-        isString: true,
-        errorMessage: 'Invalid payment_method',
-    },
-    total_price: {
-        isNumeric: true,
-        errorMessage: 'Invalid total_price',
+        in: ['body'],
+        isString: { errorMessage: 'Payment method must be a string.' }
     },
     payment_status: {
-        isString: true,
-        errorMessage: 'Invalid payment_status',
+        in: ['body'],
+        isString: { errorMessage: 'Payment status must be a string.' }
     },
-    payment_date: {
-        isDate: true,
-        errorMessage: 'Invalid payment_date',
+    total_price: {
+        in: ['body'],
+        isFloat: {
+            options: { min: 0 },
+            errorMessage: 'Total price must be a positive number.'
+        }
     },
+    user_id: {
+        in: ['body'],
+        isString: { errorMessage: 'User ID must be a string.' }
+    },
+    products: {
+        in: ['body'],
+        isArray: true,
+        errorMessage: 'Products must be an array.'
+    }
 }));
 module.exports = paymentMiddleware;

@@ -2,8 +2,8 @@ import { useMutation } from '@tanstack/react-query';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { RegisterAPI } from '../../../api/auth.api';
-import { toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -27,10 +27,10 @@ export const Register = () => {
     const formData = { ...data, role: 'customer' };
     mutate(formData);
   };
-  
+
 
   return (
-    <div className="max-w-screen-xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 p-12 bg-white rounded-md shadow-md">
+    <div className="max-w-screen-xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 p-12 bg-white rounded-md shadow-md mb-20 mt-10">
       <div className="hidden lg:block">
         <img
           src="https://png.pngtree.com/thumb_back/fh260/background/20230704/pngtree-office-essentials-technology-and-gadgets-illustration-featuring-laptop-printer-camera-tablet-image_3748458.jpg"
