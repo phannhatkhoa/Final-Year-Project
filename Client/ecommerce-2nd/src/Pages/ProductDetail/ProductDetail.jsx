@@ -66,11 +66,14 @@ const ProductDetail = () => {
     const handleCommentSubmit = async () => {
         try {
             if (!user) {
-                toast.error('Please login first to comment.');
+                toast.error('Please login first to comment!');
                 navigate('/user/signin');
                 return;
             }
-
+            if (comment.trim() === '') {
+                toast.error('Please write a comment before submitting!');
+                return;
+            }
             await commentProductAPI({
                 user_id: user.id,
                 product_id: productId,
@@ -83,8 +86,12 @@ const ProductDetail = () => {
             refetch();
         } catch (error) {
             console.error('Error commenting:', error);
-            toast.error('Failed to comment.');
+            toast.error('Failed to comment! Please try again later.');
         }
+    };
+
+    const formatPriceVND = (price) => {
+        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' ₫';
     };
 
 
@@ -99,22 +106,37 @@ const ProductDetail = () => {
                             </div>
                         </div>
                         <div className="lg:col-span-2 flex flex-col justify-between">
-                            <div className="bg-gray-100 rounded-lg p-6 shadow-md">
+                            <div className="bg-white rounded-lg p-6 shadow-md">
                                 <h3 className="text-3xl font-extrabold text-gray-800 mb-4">{product.name}</h3>
-                                <p className="text-gray-700 mb-4">{product.description}</p>
-                                <div className="flex justify-between items-center mb-4">
-                                    <p className="text-gray-700">Category: <span className="font-semibold">{product.category.name}</span></p>
-                                    <p className="text-gray-700">Brand: <span className="font-semibold">{product.brand.name}</span></p>
-                                    <p className="text-gray-700">Status: <span className="font-semibold">{product.usage_status}</span></p>
-                                    <p className="text-gray-700">Sold: <span className="font-semibold">{product.quantity_sold}</span></p>
+                                <p className="text-gray-700 mb-6">{product.description}</p>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="text-gray-700 flex items-center">
+                                        <span className="font-semibold">Category:</span>&nbsp;{product.category.name}
+                                    </div>
+                                    <div className="text-gray-700 flex items-center">
+                                        <span className="font-semibold">Brand:</span>&nbsp;{product.brand.name}
+                                    </div>
+                                    <div className="text-gray-700 flex items-center">
+                                        {/* non breaking space */}
+                                        <span className="font-semibold">Status:</span>&nbsp;{product.usage_status}
+                                    </div>
+                                    <div className="text-gray-700 flex items-center">
+                                        <span className="font-semibold">Sold:</span>&nbsp;{product.quantity_sold}
+                                    </div>
+                                    <div className="text-gray-700 flex items-center">
+                                        <span className="font-semibold">Current Quantity:</span>&nbsp;{product.current_quantity}
+                                    </div>
                                 </div>
-                                <h3 className="text-xl font-bold text-gray-900 mb-4">Price: <span className="text-green-600">${product.price}</span></h3>
+                                <h3 className="text-xl font-bold text-gray-900 mt-8">Price: <span className="text-green-600">{formatPriceVND(product.price)}</span></h3>
+
                             </div>
                             <div className="mt-10">
                                 <button onClick={handleBuyNow} type="button" className="w-full px-4 py-3 bg-gray-800 hover:bg-gray-700 text-white text-sm font-bold rounded-lg transition-colors duration-300 mb-2">Buy now</button>
                                 <button onClick={handleAddToCart} type="button" className="w-full px-4 py-2.5 border border-gray-800 bg-transparent hover:bg-gray-50 text-gray-800 text-sm font-bold rounded-lg transition-colors duration-300">Add to cart</button>
                             </div>
                         </div>
+
+
                     </div>
                 </div>
             )}

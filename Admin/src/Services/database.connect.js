@@ -19,25 +19,25 @@ class DatabaseServices {
     }
   }
 
-  get userCollection(){
+  get userCollection() {
     return this.db.collection('users');
   }
-  get productCollection(){
+  get productCollection() {
     return this.db.collection('products');
   }
-  get cartCollection(){
+  get cartCollection() {
     return this.db.collection('cart');
   }
-  get paymentCollection(){
+  get paymentCollection() {
     return this.db.collection('payment');
   }
-  get categoryCollection(){
+  get categoryCollection() {
     return this.db.collection('category');
   }
-  get brandCollection(){
+  get brandCollection() {
     return this.db.collection('brand');
   }
-  get orderHistoryCollection(){
+  get orderHistoryCollection() {
     return this.db.collection('orderHistory');
   }
 }

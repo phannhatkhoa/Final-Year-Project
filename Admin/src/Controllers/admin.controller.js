@@ -1,7 +1,5 @@
 const adminService = require('../Services/admin.services');
 
-
-
 const getAllUsersController = async (req, res, next) => {
     const users = await adminService.getAllUsers();
     return res.status(200).json({ message: "All users", users: users })
@@ -92,6 +90,8 @@ const editProductController = async (req, res, next) => {
         return res.status(500).json({ message: "Internal server error" });
     }
 };
+
+
 
 module.exports = {
     getAllUsersController,

@@ -5,15 +5,18 @@ import {
   updateCartAPI,
 } from "../../api/cart.api";
 
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { getUserProfileFromLS } from "../../utils/localStorage";
 import { useQuery } from "@tanstack/react-query";
-import { createOrderHistoryAPI } from "../../api/orderHistory.api";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 
+// Utility function to format price in VND currency
+const formatPriceVND = (price) => {
+  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " ₫";
+};
+
 const ShoppingCart = () => {
-  const navigate = useNavigate();
   const userProfile = getUserProfileFromLS();
   const { user_id } = useParams();
   const { data: cartData, refetch } = useQuery({
@@ -23,7 +26,7 @@ const ShoppingCart = () => {
 
   const [cart, setCart] = useState([]);
   const [subtotal, setSubtotal] = useState(0);
-  const [shippingFee, setShippingFee] = useState(8);
+  const [shippingFee, setShippingFee] = useState(0);
 
   useEffect(() => {
     if (cartData && cartData.cart && cartData.cart.products) {
@@ -31,7 +34,6 @@ const ShoppingCart = () => {
       updateSubtotal(cartData.cart.products);
     }
   }, [cartData]);
-  console.log("Cart:", cart);
 
   const updateSubtotal = (cartProducts) => {
     const subTotalAmount = cartProducts.reduce(
@@ -45,19 +47,20 @@ const ShoppingCart = () => {
     const selectedDeliveryOption = event.target.value;
     switch (selectedDeliveryOption) {
       case "DPD":
-        setShippingFee(8);
+        setShippingFee(45000);
         break;
       case "FedEx":
-        setShippingFee(10);
+        setShippingFee(30000);
         break;
       case "USPS":
-        setShippingFee(5);
+        setShippingFee(12000);
         break;
       default:
         setShippingFee(0);
         break;
     }
   };
+
 
   const totalAmount = subtotal + shippingFee;
 
@@ -92,37 +95,11 @@ const ShoppingCart = () => {
     await updateCart(product_id, quantity);
   };
 
-  // const handleCheckout = async () => {
-  //     try {
-  //         // Prepare order history data
-  //         const orderHistoryData = {
-  //             user_id: userProfile.id,
-  //             products: cart.map(item => ({
-  //                 product_id: item.product_id,
-  //                 product_quantity: item.product_quantity, // Add product_quantity to match createOrderHistory signature
-  //             })),
-  //             total_price: totalAmount // Pass totalAmount directly from orderHistoryData
-  //         };
-
-  //         // Create order history
-  //         await createOrderHistoryAPI(orderHistoryData);
-  //         console.log('Order history created:', orderHistoryData);
-
-  //         // Show success message or redirect to confirmation page
-  //         window.alert('Order placed successfully!');
-  //         navigate(`/orderHistory/getOrderHistoryByUserId/${userProfile.id}`);
-  //     } catch (error) {
-  //         console.error('Error creating order history:', error);
-  //         window.alert('Failed to place order. Please try again!');
-  //     }
-  // }
-
   const handleCheckout = async () => {
-    console.log(userProfile.id);
     await axios
       .post("http://localhost:5000/payment/create_payment_url/", {
         user_id: userProfile.id,
-        amount: totalAmount * 24500,
+        amount: totalAmount,
         bankCode: "VNBANK",
       })
       .then((response) => {
@@ -157,7 +134,9 @@ const ShoppingCart = () => {
                   <h3 className="font-semibold text-lg">
                     {item.product_detail?.name}
                   </h3>
-                  <p className="text-gray-500">${item.product_detail?.price}</p>
+                  <p className="text-gray-500">
+                    {formatPriceVND(item.product_detail?.price)}
+                  </p>
                 </div>
               </div>
               <div>
@@ -213,13 +192,13 @@ const ShoppingCart = () => {
                 onChange={handleDeliveryOptionChange}
               >
                 <option value="DPD">
-                  DPD Delivery - $8.00 (Delivery within 24 Hours)
+                  DPD Delivery - {formatPriceVND(45000)} (Delivery within 24 Hours)
                 </option>
                 <option value="FedEx">
-                  FedEx Express - $10.00 (Delivery within 48 Hours)
+                  FedEx Express - {formatPriceVND(30000)} (Delivery within 48 Hours)
                 </option>
                 <option value="USPS">
-                  USPS Standard - $5.00 (Delivery within 5-7 Business Days)
+                  USPS Standard - {formatPriceVND(12000)} (Delivery within 5-7 Business Days)
                 </option>
               </select>
             </div>
@@ -228,16 +207,22 @@ const ShoppingCart = () => {
             <h2 className="text-lg font-semibold mb-4">Order Summary</h2>
             <div className="flex justify-between mb-2">
               <span className="text-gray-700">Subtotal:</span>
-              <span className="font-semibold">${subtotal}</span>
+              <span className="font-semibold">
+                {formatPriceVND(subtotal)}
+              </span>
             </div>
             <div className="flex justify-between mb-2">
               <span className="text-gray-700">Shipping Fee:</span>
-              <span className="font-semibold">${shippingFee}</span>
+              <span className="font-semibold">
+                {formatPriceVND(shippingFee)}
+              </span>
             </div>
             <hr className="my-2" />
             <div className="flex justify-between">
               <span className="font-semibold text-lg">Total:</span>
-              <span className="font-semibold text-lg">${totalAmount}</span>
+              <span className="font-semibold text-lg">
+                {formatPriceVND(totalAmount)}
+              </span>
             </div>
           </div>
           <button
