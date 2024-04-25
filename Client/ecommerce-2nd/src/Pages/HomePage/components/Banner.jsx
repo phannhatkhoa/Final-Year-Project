@@ -12,14 +12,14 @@ const Banner = () => {
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
     }, 3000); // Change image every 3 seconds
-  
+
     return () => clearInterval(interval);
   }, [images.length]);
-  
+
 
   return (
     <div className="relative">
-      <img src={images[currentImageIndex]} alt="Banner" className="w-full h-auto" />
+      <img src={images[currentImageIndex]} alt="Banner" className="w-full h-21" />
       <div className="absolute inset-0 flex justify-center items-center">
       </div>
     </div>

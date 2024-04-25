@@ -36,3 +36,13 @@ export const getCommentProductAPI = async (id) => {
     throw new Error(error.message);
   }
 }
+
+export const deleteCommentAPI = async (body) => {
+  console.log(body);
+  try {
+    const response = await httpConnection.delete('/product/deleteComment', { data: body });
+    return response;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}

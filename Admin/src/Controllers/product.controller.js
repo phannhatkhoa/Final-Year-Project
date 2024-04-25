@@ -92,6 +92,14 @@ const getCommentController = async (req, res) => {
     }
 }
 
+const deleteCommentProductController = async (req, res) => {
+    const comment = await productServices.deleteCommentProduct(req.body);
+    if (comment) {
+        res.status(200).json({ message: 'Comment deleted successfully' });
+    } else {
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
 
 
 module.exports = {
@@ -101,6 +109,7 @@ module.exports = {
     updateProductController,
     deleteProductController,
     addCommentController,
-    getCommentController
+    getCommentController,
+    deleteCommentProductController
 };
 

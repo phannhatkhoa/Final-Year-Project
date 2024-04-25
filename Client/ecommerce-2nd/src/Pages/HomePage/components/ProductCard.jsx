@@ -16,14 +16,14 @@ const ProductCard = ({ product }) => {
   const formatPrice = (price) => {
     // Convert the price string to a number
     const priceNumber = parseInt(price);
-  
+
     // Format the number with commas every three digits
     const formattedPrice = priceNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-  
+
     // Append '₫' for Vietnamese Dong
     return formattedPrice + ' ₫';
   };
-  
+
 
   return (
     <div className="max-w-sm mx-auto overflow-hidden rounded-lg shadow-lg bg-white hover:shadow-xl transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
@@ -50,7 +50,7 @@ const ProductCard = ({ product }) => {
         {product.current_quantity > 0 ? (
           <p className="text-gray-700">Sold: {product.quantity_sold}</p>
         ) : (
-          <p className="text-red-500">Out of Stock</p>
+          <p className="text-red-500">SOLD OUT</p>
         )}
       </div>
     </div>

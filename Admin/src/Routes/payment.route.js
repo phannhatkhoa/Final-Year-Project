@@ -8,6 +8,7 @@ const databaseServices = require("../Services/database.connect");
 const { ObjectId } = require("mongodb");
 const OrderHistory = require("../Class/orderHistory.class");
 const { body } = require("express-validator");
+const Payment = require("../Class/payment.class");
 
 router.post("/create_payment_url", function (req, res, next) {
   process.env.TZ = "Asia/Ho_Chi_Minh";
@@ -121,6 +122,12 @@ router.get("/vnpay_return", async function (req, res, next) {
         orderDate
       );
       await databaseServices.orderHistoryCollection.insertOne(newOrderHistory);
+      const newPayment = new Payment(
+        userId,
+        orderAmount,
+        orderDate
+      );
+      await databaseServices.paymentCollection.insertOne(newPayment);
 
       // Delete the cart
       await databaseServices.cartCollection.deleteOne({ user_id: userId });

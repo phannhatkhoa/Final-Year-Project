@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { commentProductAPI, getProductByIdAPI } from '../../api/product.api';
+import { commentProductAPI, deleteCommentAPI, getProductByIdAPI } from '../../api/product.api';
 import { useNavigate, useParams } from 'react-router-dom';
 import { addToCartAPI } from '../../api/cart.api';
 import { getUserProfileFromLS } from '../../utils/localStorage';
@@ -94,6 +94,22 @@ const ProductDetail = () => {
         return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + ' ₫';
     };
 
+    const handleDeleteComment = async (comment) => {
+        try {
+            await deleteCommentAPI({
+                user_id: user.id,
+                product_id: productId,
+                comment: comment.comment
+            });
+            toast.success('Comment deleted successfully!');
+            // Refetch product data to update comments
+            refetch();
+        } catch (error) {
+            console.error('Error deleting comment:', error);
+            toast.error('Failed to delete comment! Please try again later.');
+        }
+    }
+
 
     return (
         <div className="font-sans bg-white mb-20">
@@ -151,13 +167,19 @@ const ProductDetail = () => {
                                         <h4 className="text-xl font-semibold mb-4">Previous Comments</h4>
                                         {product.comment.map((commentItem, index) => (
                                             <div key={index} className="bg-white rounded-lg p-3 mb-2 shadow-md">
-                                                <p className="text-gray-800">{commentItem.comment}</p>
-                                                <p className="text-gray-500 text-sm mt-2">Posted by: {commentItem.user_name}</p>
-                                                <p className="text-gray-500 text-sm mt-2">Posted on: {new Date(commentItem.timestamp).toLocaleString()}</p>
+                                                <div className="flex justify-between items-center mb-2">
+                                                    <h5 className="text-lg font-semibold text-gray-800">{commentItem.comment}</h5>
+                                                    {user && commentItem.user_id === user.id && (
+                                                        <button onClick={() => handleDeleteComment(commentItem)} className="text-red-500 text-sm">Delete</button>
+                                                    )}
+                                                </div>
+                                                <p className="text-gray-500 text-sm">Posted by: {commentItem.user_name}</p>
+                                                <p className="text-gray-500 text-sm">Posted on: {new Date(commentItem.timestamp).toLocaleString()}</p>
                                             </div>
                                         ))}
                                     </div>
                                 )}
+
                                 {/* Add Your Comment */}
                                 <h3 className="text-2xl font-bold text-gray-900 mt-8 mb-4">Add Your Comment</h3>
                                 <textarea

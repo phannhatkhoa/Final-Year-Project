@@ -1,5 +1,5 @@
 const express = require("express");
-const { createProductController, updateProductController, deleteProductController, getProductController, getProductByIdController, commentProductController, getCommentController, addCommentController } = require("../Controllers/product.controller");
+const { createProductController, updateProductController, deleteProductController, getProductController, getProductByIdController, commentProductController, getCommentController, addCommentController, deleteCommentProductController } = require("../Controllers/product.controller");
 const { productUpdateMiddleware, productCreateMiddleware } = require("../Middlewares/product.middlewares");
 
 const router = express.Router();
@@ -9,7 +9,7 @@ const router = express.Router();
 //access: Private
 //Request: { name, price, description, category, usage_status, image, current_quantity, quantity_sold  }
 //Response: { message: "Product created successfully", product: { name, price, description, category, usage_status, image, current_quantity, quantity_sold  } }
-router.post("/create",productCreateMiddleware, createProductController);
+router.post("/create", productCreateMiddleware, createProductController);
 
 
 // Get all products
@@ -59,5 +59,13 @@ router.post("/comment", addCommentController);
 //Request: { id }
 //Response: { comments: [{ comment }] }
 router.get("/getComments/:id", getCommentController);
+
+// delete comment
+//path: product/deleteComment
+//method: DELETE
+//access: Private
+//Request: {comment}
+//Response: { message: "Comment deleted successfully" }
+router.delete("/deleteComment", deleteCommentProductController);
 
 module.exports = router;

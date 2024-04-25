@@ -105,10 +105,11 @@ const ShoppingCart = () => {
       .then((response) => {
         const paymentUrl = response.data;
         window.location.href = paymentUrl;
+        toast.success("Payment successfully!");
       })
       .catch((error) => {
         console.error("Error creating payment:", error);
-        toast.success("Failed to create payment. Please try again!");
+        toast.error("Failed to create payment. Please try again!");
       });
   };
 

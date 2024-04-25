@@ -1,6 +1,7 @@
 const Product = require("../Class/product.class");
 const { ObjectId } = require('mongodb');
 const databaseServices = require("./database.connect");
+const c = require("config");
 
 class ProductServices {
     async createProduct(body) {
@@ -130,8 +131,8 @@ class ProductServices {
         }
     }
 
-    async commentProduct(body){
-        const {user_id, product_id, comment} = body;
+    async commentProduct(body) {
+        const { user_id, product_id, comment } = body;
         try {
             const userIdObject = new ObjectId(user_id);
             const productIdObject = new ObjectId(product_id);
@@ -171,6 +172,31 @@ class ProductServices {
             return product.comment;
         } catch (error) {
             console.error('Error during fetching comment:', error.message);
+            return null;
+        }
+    }
+
+    async deleteCommentProduct(body) {
+        const { product_id, comment, user_id } = body;
+        try {
+            const productId = new ObjectId(product_id);
+            const product = await databaseServices.productCollection.findOne({ _id: productId });
+            if (!product) {
+                throw new Error('Product not found');
+            }
+            const commentIndex = product.comment.findIndex((c) => c.comment === comment && c.user_id.toString() === user_id);
+            if (commentIndex === -1) {
+                throw new Error('Comment not found');
+            }
+            product.comment.splice(commentIndex, 1);
+            await databaseServices.productCollection.updateOne(
+                { _id: productId },
+                { $set: { comment: product.comment } }
+            );
+            return true;
+        }
+        catch (error) {
+            console.error('Error during comment deletion:', error.message);
             return null;
         }
     }

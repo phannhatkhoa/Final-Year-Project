@@ -57,7 +57,6 @@ export const Home = () => {
       <div className="mt10 mb-8">
         <Banner />
       </div>
-
       <div className="relative mb-4 flex justify-center">
         <div className="relative w-full max-w-md">
           <input
