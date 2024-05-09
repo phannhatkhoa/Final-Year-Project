@@ -27,12 +27,24 @@ const ShoppingCart = () => {
   const [cart, setCart] = useState([]);
   const [subtotal, setSubtotal] = useState(0);
   const [shippingFee, setShippingFee] = useState(0);
+  const [message, setMessage] = useState("");
+  const [showMessage, setShowMessage] = useState(false);
 
   useEffect(() => {
+
     if (cartData && cartData.cart && cartData.cart.products) {
       setCart(cartData.cart.products);
       updateSubtotal(cartData.cart.products);
     }
+    const currentUrl = window.location.href;
+
+    // Check if URL contains "error=true"
+    if (currentUrl.includes("error=true")) {
+      // If URL contains "error=true", show a toast for payment fail
+      setMessage("Payment failed. Please try again!");
+      setShowMessage(true);
+    }
+
   }, [cartData]);
 
   const updateSubtotal = (cartProducts) => {
@@ -105,7 +117,6 @@ const ShoppingCart = () => {
       .then((response) => {
         const paymentUrl = response.data;
         window.location.href = paymentUrl;
-        toast.success("Payment successfully!");
       })
       .catch((error) => {
         console.error("Error creating payment:", error);
@@ -121,58 +132,65 @@ const ShoppingCart = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
         <div className="col-span-3 md:col-span-2 space-y-4">
           {cart.map((item) => (
-            <div
-              key={item.product_id}
-              className="border border-gray-200 rounded-md p-4 flex items-center justify-between"
-            >
-              <div className="flex items-center space-x-4">
-                <img
-                  src={item.product_detail?.image}
-                  alt={item.product_detail?.name}
-                  className="w-16 h-16 rounded-md shadow-md"
-                />
-                <div>
-                  <h3 className="font-semibold text-lg">
-                    {item.product_detail?.name}
-                  </h3>
-                  <p className="text-gray-500">
-                    {formatPriceVND(item.product_detail?.price)}
-                  </p>
+            <div>
+              <div
+                key={item.product_id}
+                className="border border-gray-200 rounded-md p-4 flex items-center justify-between"
+              >
+                <div className="flex items-center space-x-4">
+                  <img
+                    src={item.product_detail?.image}
+                    alt={item.product_detail?.name}
+                    className="w-16 h-16 rounded-md shadow-md"
+                  />
+                  <div>
+                    <h3 className="font-semibold text-lg">
+                      {item.product_detail?.name}
+                    </h3>
+                    <p className="text-gray-500">
+                      {formatPriceVND(item.product_detail?.price)}
+                    </p>
+                  </div>
                 </div>
+
+                <div>
+                  <button
+                    onClick={() =>
+                      handleQuantityChange(
+                        item.product_id,
+                        item.product_quantity - 1
+                      )
+                    }
+                    className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold px-2 py-1 rounded-l"
+                  >
+                    -
+                  </button>
+                  <span className="px-3 py-1 bg-gray-100 rounded-md">
+                    {item.product_quantity}
+                  </span>
+                  <button
+                    onClick={() =>
+                      handleQuantityChange(
+                        item.product_id,
+                        item.product_quantity + 1
+                      )
+                    }
+                    className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold px-2 py-1 rounded-r"
+                  >
+                    +
+                  </button>
+                  <button
+                    onClick={() => deleteProduct(item.product_id)}
+                    className="ml-4 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md"
+                  >
+                    Delete
+                  </button>
+                </div>
+
               </div>
-              <div>
-                <button
-                  onClick={() =>
-                    handleQuantityChange(
-                      item.product_id,
-                      item.product_quantity - 1
-                    )
-                  }
-                  className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold px-2 py-1 rounded-l"
-                >
-                  -
-                </button>
-                <span className="px-3 py-1 bg-gray-100 rounded-md">
-                  {item.product_quantity}
-                </span>
-                <button
-                  onClick={() =>
-                    handleQuantityChange(
-                      item.product_id,
-                      item.product_quantity + 1
-                    )
-                  }
-                  className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold px-2 py-1 rounded-r"
-                >
-                  +
-                </button>
-                <button
-                  onClick={() => deleteProduct(item.product_id)}
-                  className="ml-4 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md"
-                >
-                  Delete
-                </button>
-              </div>
+              <div> {showMessage && (
+                <div style={{ color: 'red' }}>{message}</div>
+              )}</div>
             </div>
           ))}
         </div>

@@ -47,6 +47,9 @@ const AdminHeader = () => {
                                         <Link to="/admin/getProducts" className="block px-4 py-2 hover:bg-gray-200">
                                             Manage Product
                                         </Link>
+                                        <Link to="/admin/getOrderHistory" className="block px-4 py-2 hover:bg-gray-200">
+                                            Order History
+                                        </Link>
                                     </div>
                                 )}
                             </div>

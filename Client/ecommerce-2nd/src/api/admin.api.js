@@ -63,3 +63,22 @@ export const editProductAPI = async (id, body) => {
         throw error;
     }
 }
+export const getOrderHistoryAdminAPI = async () => {
+    try {
+        const response = await httpConnection.get('/orderHistory/getAllOrderHistory');
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+
+}
+
+export const updateOrderStatusAPI = async (id, orderStatus) => {
+    try {
+        const response = await httpConnection.put(`/admin/updateOrderStatus`, { id, order_status: orderStatus });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+

@@ -14,24 +14,11 @@ const createOrderHistory = async (req, res) => {
     }
 };
 
-const updateOrderStatus = async (req, res) => {
-    try {
-        const { orderId, newStatus } = req.body;
-        const success = await orderHistoryServices.updateOrderStatus(orderId, newStatus);
-        if (success) {
-            res.status(200).json({ message: 'Order status updated successfully' });
-        } else {
-            res.status(404).json({ message: 'Order not found or error updating status' });
-        }
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
-    }
-};
+
 
 const getOrderHistoryByUserId = async (req, res) => {
     try {
-        const {user_id} = req.params;
+        const { user_id } = req.params;
         const orderHistory = await orderHistoryServices.getOrderHistoryByUserId(user_id);
         if (orderHistory) {
             res.status(200).json({ message: 'Order history', orderHistory });
@@ -44,8 +31,24 @@ const getOrderHistoryByUserId = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 }
+
+const getAllOrderHistory = async (req, res) => {
+    try {
+        const orderHistory = await orderHistoryServices.getAllOrderHistory();
+        if (orderHistory) {
+            res.status(200).json({ message: 'All order history', orderHistory });
+        } else {
+            res.status(404).json({ message: 'Order history not found' });
+        }
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
 module.exports = {
     createOrderHistory,
-    updateOrderStatus,
-    getOrderHistoryByUserId
+    getOrderHistoryByUserId,
+    getAllOrderHistory
 };

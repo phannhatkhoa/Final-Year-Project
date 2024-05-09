@@ -38,7 +38,10 @@ const OrderHistory = () => {
                             </li>
                         ))}
                     </ul>
-                    <p className="text-2xl font-semibold mt-6 text-gray-900">Total Price: {order.total_price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+                    <div className="flex justify-between mt-6">
+                        <p className="text-2xl font-semibold text-gray-900">Total Price: {order.total_price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</p>
+                        <p className="text-2xl font-semibold text-gray-900">Order Status: {order.order_status}</p>
+                    </div>
                 </div>
             ))}
         </div>

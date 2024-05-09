@@ -118,6 +118,19 @@ class AdminService {
             return null;
         }
     }
+
+    async updateOrderStatus(id, order_status) {
+        try {
+            await databaseServices.orderHistoryCollection.updateOne(
+                { _id: new ObjectId(id) },
+                { $set: { order_status: order_status } }
+            );
+            return { message: "Order status updated successfully" }
+        } catch (error) {
+            console.error('Error during updating order status:', error.message);
+            return null;
+        }
+    }
 }
 
 const adminService = new AdminService();

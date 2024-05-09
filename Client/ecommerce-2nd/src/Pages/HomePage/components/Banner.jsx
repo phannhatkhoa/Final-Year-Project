@@ -19,10 +19,12 @@ const Banner = () => {
 
   return (
     <div className="relative">
-      <img src={images[currentImageIndex]} alt="Banner" className="w-full h-21" />
+      <img src={images[currentImageIndex]} alt="Banner" className="w-full h-21 object-cover object-top" />
       <div className="absolute inset-0 flex justify-center items-center">
       </div>
     </div>
+
+
   );
 };
 

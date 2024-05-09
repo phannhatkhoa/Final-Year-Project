@@ -1,4 +1,4 @@
-const { getAllUsersController, updateUserRoleController, getAllProductsController, deleteUserController, addProductController, deleteProductController, editProductController, flashSaleController } = require("../Controllers/admin.controller");
+const { getAllUsersController, updateUserRoleController, getAllProductsController, deleteUserController, addProductController, deleteProductController, editProductController, flashSaleController, updateOrderStatusController } = require("../Controllers/admin.controller");
 const express = require("express");
 const { productCreateMiddleware, productUpdateMiddleware, deleteProductMiddleware } = require("../Middlewares/product.middlewares");
 const { deleteUserMiddleware } = require("../Middlewares/auth.middlewares");
@@ -60,6 +60,6 @@ router.delete("/deleteProduct/:id", deleteProductMiddleware, deleteProductContro
 // Request: { updatedData }
 // Response: { message: "Product updated successfully" }
 router.put("/updateProduct/:id", productUpdateMiddleware, editProductController);
-
+router.put("/updateOrderStatus", updateOrderStatusController);
 
 module.exports = router;

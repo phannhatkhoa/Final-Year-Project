@@ -106,39 +106,45 @@ router.get("/vnpay_return", async function (req, res, next) {
 
   if (secureHash === signed) {
     const userId = new ObjectId(vnp_Params["vnp_OrderInfo"]);
-    const cart = await databaseServices.cartCollection.findOne({
-      user_id: userId,
-    });
+    if (vnp_Params["vnp_ResponseCode"] === "00") {
+      const cart = await databaseServices.cartCollection.findOne({
+        user_id: userId,
+      });
 
-    if (cart) {
-      const orderAmount = vnp_Params["vnp_Amount"] / 100;
-      const orderDate = new Date();
+      if (cart) {
+        const orderAmount = vnp_Params["vnp_Amount"] / 100;
+        const orderDate = new Date();
 
-      // Create a new order history entry
-      const newOrderHistory = new OrderHistory(
-        userId,
-        cart.products,
-        orderAmount,
-        orderDate
-      );
-      await databaseServices.orderHistoryCollection.insertOne(newOrderHistory);
-      const newPayment = new Payment(
-        userId,
-        orderAmount,
-        orderDate
-      );
-      await databaseServices.paymentCollection.insertOne(newPayment);
+        // Create a new order history entry
+        const newOrderHistory = new OrderHistory(
+          userId,
+          cart.products,
+          orderAmount,
+          orderDate,
+          order_status = "Pending"
+        );
+        await databaseServices.orderHistoryCollection.insertOne(newOrderHistory);
+        const newPayment = new Payment(
+          userId,
+          orderAmount,
+          orderDate
+        );
+        await databaseServices.paymentCollection.insertOne(newPayment);
 
-      // Delete the cart
-      await databaseServices.cartCollection.deleteOne({ user_id: userId });
-      await updateProductQuantities(cart.products);
+        // Delete the cart
+        await databaseServices.cartCollection.deleteOne({ user_id: userId });
+        await updateProductQuantities(cart.products);
 
-      // Redirect to order history page
-      res.redirect(
-        `http://localhost:3000/orderHistory/getOrderHistoryByUserId/${userId}`
-      );
+        // Redirect to order history page
+        res.redirect(
+          `http://localhost:3000/orderHistory/getOrderHistoryByUserId/${userId}`
+        );
+      }
+
     } else {
-      res.json({ message: "Payment failed" });
+      res.redirect(
+        `http://localhost:3000/cart/getCart/${userId}?error=true`
+      );
     }
   }
 });

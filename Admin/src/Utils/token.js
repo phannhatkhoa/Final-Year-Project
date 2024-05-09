@@ -13,14 +13,14 @@ class TokenManager {
             email: user.email,
             full_name: user.full_name,
             role: user.role,
-            expiresIn: '15m' // Thời gian hết hạn của Access Token
+            expiresIn: '15m' 
         };
         const accessToken = jwt.sign(accessTokenPayload, this.secretKey, { expiresIn: '15m' });
 
-        // Tạo Refresh Token
+        //  Refresh Token
         const refreshTokenPayload = {
             id: user._id,
-            expiresIn: '7d' // Thời gian hết hạn của Refresh Token
+            expiresIn: '7d' 
         };
         const refreshToken = jwt.sign(refreshTokenPayload, this.secretKey, { expiresIn: '7d' });
 

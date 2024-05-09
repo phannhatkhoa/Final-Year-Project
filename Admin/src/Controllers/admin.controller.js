@@ -90,6 +90,20 @@ const editProductController = async (req, res, next) => {
         return res.status(500).json({ message: "Internal server error" });
     }
 };
+const updateOrderStatusController = async (req, res) => {
+    try {
+        const { id, order_status } = req.body;
+        const success = await adminService.updateOrderStatus(id, order_status);
+        if (success) {
+            res.status(200).json({ message: 'Order status updated successfully' });
+        } else {
+            res.status(404).json({ message: 'Order not found or error updating status' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
 
 
 
@@ -100,5 +114,6 @@ module.exports = {
     deleteUserController,
     addProductController,
     deleteProductController,
-    editProductController
+    editProductController,
+    updateOrderStatusController
 }
